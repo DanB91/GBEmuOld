@@ -10,7 +10,23 @@ MMU::~MMU(){
 }
 
 unsigned char MMU::readByte(unsigned short address) const{
-    return 0;
+    unsigned char byte = 0;
+
+    //make sure there is actually a game in memory before trying to read from it
+    if(this->ROM == nullptr){
+        throw GBEmuException("ROM not loaded into memory");
+    }
+
+    switch(address & 0xF000){
+        case 0:
+            if(this->inBIOS && address < 0x100){
+                byte = this->BIOS[address];
+            } else {
+                byte = this->ROM[address];
+            }
+    }
+
+    return byte;
 }
 
 
@@ -26,6 +42,11 @@ void MMU::writeWord(unsigned short value, unsigned short address){
 }
 
 void MMU::loadROM(const std::string &romFileName){
+
+    if(this->ROM != nullptr){ //if there is a ROM loaded, delete it from memory
+        delete[] this->ROM;
+        this->ROM = nullptr;
+    }
     
     std::ifstream file(romFileName, std::ios::in | std::ios::binary | std::ios::ate);
     int fileSize;

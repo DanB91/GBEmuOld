@@ -34,4 +34,14 @@ TEST_F(MMUTest, loadrom){
 
 }
 
+TEST_F(MMUTest, readByte){
+    mmu.loadROM("/home/dan/Downloads/Pokemon Red.gb");
+    ASSERT_EQ(mmu.readByte(0), 0x31);
+
+
+    mmu.inBIOS = false;
+
+    ASSERT_EQ(mmu.readByte(0), 0xFF);
+
+}
 
