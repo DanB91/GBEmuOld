@@ -1,5 +1,7 @@
 #include <fstream>
+#include "GBEmuExceptions.h"
 #include "MMU.h"
+
 
 using namespace GBEmu;
 
@@ -29,7 +31,7 @@ void MMU::loadROM(const std::string &romFileName){
     int fileSize;
 
     if(!file.is_open()){
-        throw "derp";
+        throw FileNotFoundException(romFileName);
     }
 
     fileSize = file.tellg();
