@@ -18,12 +18,23 @@ unsigned char MMU::readByte(unsigned short address) const{
     }
 
     switch(address & 0xF000){
+        //ROM Bank 0
         case 0:
             if(this->inBIOS && address < 0x100){
                 byte = this->BIOS[address];
             } else {
                 byte = this->ROM[address];
             }
+            break;
+
+        case 0x1000: case 0x2000: case 0x3000:
+        
+        //ROM Bank 1
+        case 0x4000: case 0x5000: case 0x6000: case 0x7000:
+            byte = this->ROM[address];
+            break;
+
+            
     }
 
     return byte;
