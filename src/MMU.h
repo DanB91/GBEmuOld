@@ -3,6 +3,7 @@
 
 #include <string>
 #include <array>
+#include "types.h"
 
 /*
  * Represents the memeory management unit of the Game Boy
@@ -34,11 +35,11 @@ namespace GBEmu{
                 {}
             ~MMU();
 
-            unsigned char readByte(unsigned short address) const;
-            void writeByte(unsigned char value, unsigned short address);
+            byte readByte(word address) const;
+            void writeByte(byte value, word address);
 
-            unsigned short readWord(unsigned short address) const;
-            void writeWord(unsigned short value, unsigned short address);
+            word readWord(word address) const;
+            void writeWord(word value, word address);
 
             void loadROM(const std::string &romFileName);
 
@@ -46,11 +47,11 @@ namespace GBEmu{
 
 
             bool inBIOS;
-            const unsigned char *ROM; //rom file mapped to memory
-            std::array<unsigned char, 8192> workingRAM; //internal game boy ram
-            std::array<unsigned char, 8192> externalRAM; //ram in the cartridge
-            std::array<unsigned char, 128> zeroPageRAM; //"fast" ram mapped at the end of the ram
-            const std::array<unsigned char, 256> BIOS; //holds the bios program
+            const byte *ROM; //rom file mapped to memory
+            std::array<byte, 8192> workingRAM; //internal game boy ram
+            std::array<byte, 8192> externalRAM; //ram in the cartridge
+            std::array<byte, 128> zeroPageRAM; //"fast" ram mapped at the end of the ram
+            const std::array<byte, 256> BIOS; //holds the bios program
     };
 
 #endif

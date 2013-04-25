@@ -9,8 +9,8 @@ MMU::~MMU(){
     delete[] this->ROM;
 }
 
-unsigned char MMU::readByte(unsigned short address) const{
-    unsigned char byte = 0;
+byte MMU::readByte(word address) const{
+    byte byte = 0;
 
     //make sure there is actually a game in memory before trying to read from it
     if(this->ROM == nullptr){
@@ -41,44 +41,17 @@ unsigned char MMU::readByte(unsigned short address) const{
 }
 
 
-void MMU::writeByte(unsigned char value, unsigned short address){
+void MMU::writeByte(byte value, word address){
 }
 
 
-unsigned short MMU::readWord(unsigned short address) const{
+word MMU::readWord(word address) const{
     return 0;
 }
 
-void MMU::writeWord(unsigned short value, unsigned short address){
+void MMU::writeWord(word value, word address){
 }
 
-void MMU::loadROM(const std::string &romFileName){
 
-    if(this->ROM != nullptr){ //if there is a ROM loaded, delete it from memory
-        delete[] this->ROM;
-        this->ROM = nullptr;
-    }
-    
-    std::ifstream file(romFileName, std::ios::in | std::ios::binary | std::ios::ate);
-    int fileSize;
-
-    if(!file.is_open()){
-        throw FileNotFoundException(romFileName);
-    }
-
-    fileSize = file.tellg();
-    this->ROM = new unsigned char[fileSize]; //allocate space for ROM in memory
-
-    file.seekg(0, std::ios::beg);
-    file.read((char*)this->ROM, fileSize); //read ROM into memory
-
-    file.close();
-
-
-
-
-
-
-}
 
 

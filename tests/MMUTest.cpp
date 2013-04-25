@@ -10,7 +10,7 @@ class MMUTest : public ::testing::Test{
 
         GBEmu::MMU mmu;
 };
-
+/*
 TEST_F(MMUTest, loadrom){
     const char *fn = "/home/dan/Downloads/Pokemon Red.gb";
     mmu.loadROM(fn);
@@ -44,4 +44,4 @@ TEST_F(MMUTest, readByte){
     ASSERT_EQ(mmu.readByte(0), 0xFF);
 
 }
-
+*/
