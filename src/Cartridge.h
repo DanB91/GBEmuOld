@@ -3,7 +3,7 @@
 
 #include <string>
 #include <memory>
-
+#include <vector>
 #include "types.h"
 
 namespace GBEmu{
@@ -12,11 +12,13 @@ namespace GBEmu{
 
             Cartridge(const std::string &romFileName);
             byte readROM(word address) const;
+            int getCartType() const;
+            const std::vector<byte> &getROM() const ;
 
         private:
             void loadROM(const std::string &romFileName);
 
-            std::shared_ptr<byte> ROM;
+            std::vector<byte> ROM;
 
     };
 
