@@ -11,7 +11,13 @@ namespace GBEmu{
         public:
 
             Cartridge(const std::string &romFileName);
+            
             byte readROM(word address) const;
+            byte readRAM(word address) const;
+
+            void writeROM(word address, byte value);
+            void writeRAM(word address, byte value);
+            
             int getCartType() const;
             const std::vector<byte> &getROM() const ;
 

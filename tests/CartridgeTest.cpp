@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include "Cartridge.h"
+#include "GBEmuExceptions.h"
 
 using namespace GBEmu;
 
@@ -41,4 +42,11 @@ TEST_F(CartridgeTest, loadrom){
     f.close();
 
 
+}
+
+TEST_F(CartridgeTest, readROM){
+
+    ASSERT_THROW(cart.readROM(0x8000), GBEmuException);
+
+    ASSERT_EQ(cart.readROM(0), 0xC3);
 }
