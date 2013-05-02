@@ -90,7 +90,7 @@ void MMU::writeByte(byte value, word address){
 
 
 word MMU::readWord(word address) const{
-    return 0;
+    return readByte(address) | (readByte(address + 1) << 8);
 }
 
 void MMU::writeWord(word value, word address){
