@@ -4,6 +4,8 @@
 #include <string>
 #include <array>
 #include "types.h"
+#include "Cartridge.h"
+#include <memory>
 
 /*
  * Represents the memeory management unit of the Game Boy
@@ -13,8 +15,8 @@ namespace GBEmu{
     class MMU{
         public:
 
-            MMU():
-                inBIOS(true), ROM(nullptr), workingRAM({0}), externalRAM({0}), zeroPageRAM({0}),
+            MMU(const CartridgePtr &cart):
+                cart(cart), inBIOS(true),   workingRAM({0}), zeroPageRAM({0}),
                 BIOS({
                         0x31, 0xFE, 0xFF, 0xAF, 0x21, 0xFF, 0x9F, 0x32, 0xCB, 0x7C, 0x20, 0xFB, 0x21, 0x26, 0xFF, 0x0E,
                         0x11, 0x3E, 0x80, 0x32, 0xE2, 0x0C, 0x3E, 0xF3, 0xE2, 0x32, 0x3E, 0x77, 0x77, 0x3E, 0xFC, 0xE0,
@@ -33,7 +35,6 @@ namespace GBEmu{
                         0x21, 0x04, 0x01, 0x11, 0xA8, 0x00, 0x1A, 0x13, 0xBE, 0x20, 0xFE, 0x23, 0x7D, 0xFE, 0x34, 0x20,
                         0xF5, 0x06, 0x19, 0x78, 0x86, 0x23, 0x05, 0x20, 0xFB, 0x86, 0x20, 0xFE, 0x3E, 0x01, 0xE0, 0x50})
                 {}
-            ~MMU();
 
             byte readByte(word address) const;
             void writeByte(byte value, word address);
@@ -41,18 +42,19 @@ namespace GBEmu{
             word readWord(word address) const;
             void writeWord(word value, word address);
 
-            void loadROM(const std::string &romFileName);
-
-        //private:
+            void leaveBIOS();  //goes out of BIOS mode
 
 
+        private:
+            CartridgePtr cart;
             bool inBIOS;
-            const byte *ROM; //rom file mapped to memory
             std::array<byte, 8192> workingRAM; //internal game boy ram
-            std::array<byte, 8192> externalRAM; //ram in the cartridge
             std::array<byte, 128> zeroPageRAM; //"fast" ram mapped at the end of the ram
             const std::array<byte, 256> BIOS; //holds the bios program
     };
 
-#endif
+    typedef std::shared_ptr<MMU> MMUPtr;
 }
+
+
+#endif

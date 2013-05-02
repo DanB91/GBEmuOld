@@ -1,47 +1,32 @@
 #include <gtest/gtest.h>
 #include <fstream>
 #include "MMU.h"
+#include "GBEmuExceptions.h"
+
+using namespace GBEmu;
 
 class MMUTest : public ::testing::Test{
     protected:
         virtual void SetUp(){
+            mmu = MMUPtr(new MMU(CartridgePtr(new Cartridge("/home/dan/Downloads/Tetris.gb"))));
         }
 
 
-        GBEmu::MMU mmu;
+        MMUPtr mmu;
 };
-/*
-TEST_F(MMUTest, loadrom){
-    const char *fn = "/home/dan/Downloads/Pokemon Red.gb";
-    mmu.loadROM(fn);
-    std::ifstream f(fn, std::ios::in | std::ios::binary);
-    unsigned char byte;
-    int i = 0;
 
-    if(!f.is_open()){
-        FAIL();
-    }
-
-    while(f.good()){
-        f.read((char*)&byte, 1);
-
-        ASSERT_EQ(mmu.ROM[i], byte) << "Index: "<< i;
-
-        i++;
-    }
-
-    f.close();
-
-}
 
 TEST_F(MMUTest, readByte){
-    mmu.loadROM("/home/dan/Downloads/Pokemon Red.gb");
-    ASSERT_EQ(mmu.readByte(0), 0x31);
 
+    
+    ASSERT_EQ(mmu->readByte(0), 0x31); //BIOS
 
-    mmu.inBIOS = false;
+    mmu->leaveBIOS();
 
-    ASSERT_EQ(mmu.readByte(0), 0xFF);
+    ASSERT_EQ(mmu->readByte(0), 0xC3); //ROM
+
+    ASSERT_EQ(mmu->readByte(0xC044), 0); //internal RAM
+
+    ASSERT_THROW(mmu->readByte(0xA445), GBEmuException ); //external RAM
 
 }
-*/
