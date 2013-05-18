@@ -15,8 +15,8 @@ namespace GBEmu{
             byte readROM(word address) const;
             byte readRAM(word address) const;
 
-            void writeROM(word address, byte value);
-            void writeRAM(word address, byte value);
+            void writeROM(byte value, word address);
+            void writeRAM(byte value, word address);
             
             int getCartType() const;
             const std::vector<byte> &getROM() const ;

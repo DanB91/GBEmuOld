@@ -35,6 +35,14 @@ byte Cartridge::readRAM(word address) const{
     throw GBEmuException("External RAM not yet implemented");
 }
 
+
+void Cartridge::writeROM(byte value, word address){
+    throw GBEmuException("MBC not implemnted now");
+}
+
+void Cartridge::writeRAM(byte value, word address){
+    throw GBEmuException("External RAM not yet implemented");
+}
 //loads rom file into memory and loads the cartidge type
 //currently, only ROMs of type (no MBC) are supported
 void Cartridge::loadROM(const std::string &romFileName){

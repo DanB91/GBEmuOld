@@ -48,3 +48,23 @@ TEST_F(MMUTest, readWord){
 }
 
 
+
+
+TEST_F(MMUTest, writeByte){
+
+    
+    ASSERT_THROW(mmu->writeByte(0, 0), GBEmuException); //BIOS
+
+    mmu->leaveBIOS();
+
+    ASSERT_THROW(mmu->writeByte(0, 0), GBEmuException); //ROM
+
+    //internal RAM
+    for(int i = 0xC000; i < 0xFDFF; i++){
+        mmu->writeByte(i%20, i);
+        ASSERT_EQ(mmu->readByte(i), i%20);
+    }
+
+    ASSERT_THROW(mmu->writeByte(0, 0xA000), GBEmuException); //ext ram
+
+}
