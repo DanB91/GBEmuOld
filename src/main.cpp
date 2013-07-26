@@ -1,4 +1,5 @@
-#include "MainWindow.h"
+#include "GUI/GBEmuGUIMainWindow.h"
+#include <wx/wx.h>
 
 class MainApp : public wxApp{
     public:
@@ -8,7 +9,7 @@ class MainApp : public wxApp{
 
 
 bool MainApp::OnInit(){
-    MainWindow *mw = new MainWindow;
+    GBEmuGUIMainWindow *mw = new GBEmuGUIMainWindow(NULL);
     mw->Show();
     return true;
 }
