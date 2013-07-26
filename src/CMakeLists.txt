@@ -1,12 +1,17 @@
+SET(CMAKE_FIND_LIBRARY_PREFIXES "")
+SET(CMAKE_FIND_LIBRARY_SUFFIXES ".lib")
 
-FIND_PACKAGE(Qt4 REQUIRED)
-INCLUDE(${QT_USE_FILE})
+
+# It was noticed that when using MinGW gcc it is essential that 'core' is mentioned before 'base'.
+find_package(wxWidgets COMPONENTS core base REQUIRED)
+ 
+ 
+# wxWidgets include (this will do all the magic to configure everything)
+include( "${wxWidgets_USE_FILE}" )
 
 
-QT4_WRAP_UI(UISrcs mainwindow.ui)
-QT4_WRAP_CPP(MOCSrcs mainwindow.h)
-set(source MMU.cpp Cartridge.cpp mainwindow.cpp GameBoy.cpp CPU.cpp)
+set(source MMU.cpp Cartridge.cpp MainWindow.cpp GameBoy.cpp CPU.cpp)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_BINARY_DIR})
-add_library(GBEmuLib ${source} ${MOCSrcs} ${UISrcs})
-add_executable(GBEmu ${source} main.cpp ${MOCSrcs} ${UISrcs})
-target_link_libraries(GBEmu ${QT_LIBRARIES})
+add_library(GBEmuLib ${source})
+add_executable(GBEmu ${source} main.cpp )
+target_link_libraries(GBEmu ${wxWidgets_LIBRARIES})

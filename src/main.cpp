@@ -1,11 +1,16 @@
-#include <QApplication>
-#include "mainwindow.h"
+#include "MainWindow.h"
 
-int main(int argc, char *argv[])
-{
-    QApplication a(argc, argv);
-    MainWindow window;
+class MainApp : public wxApp{
+    public:
+        virtual bool OnInit();
+};
 
-    window.show();
-    return a.exec();
+
+
+bool MainApp::OnInit(){
+    MainWindow *mw = new MainWindow;
+    mw->Show();
+    return true;
 }
+IMPLEMENT_APP(MainApp)
+
