@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <fstream>
-#include "MMU.h"
+#include "GB/MMU.h"
 #include "GBEmuExceptions.h"
 
 using namespace GBEmu;

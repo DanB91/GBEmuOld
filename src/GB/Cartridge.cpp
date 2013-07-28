@@ -64,7 +64,7 @@ void Cartridge::loadROM(const std::string &romFileName){
     file.read((char*)ROM.data(), fileSize); //read ROM into memory
 
     if(ROM[CART_TYPE] != 0){
-        throw GBEmuException("ROM with no MBC only supported now");
+        throw GBEmuException("ROM with no MBC only supported, for now");
     } 
 
     file.close();

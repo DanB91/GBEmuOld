@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 #include <fstream>
-#include "Cartridge.h"
+#include "GB/Cartridge.h"
 #include "GBEmuExceptions.h"
 
 using namespace GBEmu;

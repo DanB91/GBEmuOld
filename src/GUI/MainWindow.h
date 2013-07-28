@@ -17,6 +17,8 @@
 #include <wx/font.h>
 #include <wx/colour.h>
 #include <wx/settings.h>
+#include <wx/stattext.h>
+#include <wx/sizer.h>
 #include <wx/frame.h>
 
 ///////////////////////////////////////////////////////////////////////////
@@ -32,14 +34,17 @@ class MainWindow : public wxFrame
 	protected:
 		wxMenuBar* m_menubar1;
 		wxMenu* m_menu1;
+		wxStaticText* cpuStatus;
 		
 		// Virtual event handlers, overide them in your derived class
+		virtual void OpenROM( wxCommandEvent& event ) { event.Skip(); }
 		virtual void OnExit( wxCommandEvent& event ) { event.Skip(); }
+		virtual void UpdateCPUStatus( wxUpdateUIEvent& event ) { event.Skip(); }
 		
 	
 	public:
 		
-		MainWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("GBEmu"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 160,144 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
+		MainWindow( wxWindow* parent, wxWindowID id = wxID_ANY, const wxString& title = wxT("GBEmu"), const wxPoint& pos = wxDefaultPosition, const wxSize& size = wxSize( 640,144 ), long style = wxDEFAULT_FRAME_STYLE|wxTAB_TRAVERSAL );
 		~MainWindow();
 	
 };

@@ -4,7 +4,7 @@
 enable_testing()
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIR} . ../src)
-set(LIBS gtest gtest_main GBEmuLib)
+set(LIBS gtest gtest_main GBEmuGUI GB )
 
 macro(createTest nameOfTest testExe testFile)
     add_executable(${testExe} ${testFile})
@@ -14,3 +14,4 @@ endmacro(createTest)
 
 createTest(MMUTest test_mmu MMUTest.cpp)
 createTest(CartridgeTest test_cartridge CartridgeTest.cpp)
+createTest(CPUTest test_cpu CPUTest.cpp)
