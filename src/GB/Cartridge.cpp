@@ -4,8 +4,12 @@
 
 #define CART_TYPE 0x147
 #define MAX_ROM_ADDR 0x7FFF
+#define NIN_LOGO_OFFSET 0x104 //offset into ROM where logo is located
+#define NIN_LOGO_SIZE 48 //number of bytes in nintendo logo
 
 using namespace GBEmu;
+
+static void verifyROM(const std::vector<byte>&);
 
 Cartridge::Cartridge(const std::string &romFileName){
     loadROM(romFileName);
@@ -63,15 +67,35 @@ void Cartridge::loadROM(const std::string &romFileName){
     
     file.read((char*)ROM.data(), fileSize); //read ROM into memory
 
-    if(ROM[CART_TYPE] != 0){
-        throw GBEmuException("ROM with no MBC only supported, for now");
-    } 
+    verifyROM(ROM);
 
     file.close();
 
 
+}
 
+//verifies if the ROM is a valid GB ROM
+//throws exception, otherwise
+static void verifyROM(const std::vector<byte> &ROM){
+    std::array<byte,NIN_LOGO_SIZE> scrollingNintendoLogo = 
+    {   
+        0xCE, 0xED, 0x66, 0x66, 0xCC, 0x0D, 
+        0x00, 0x0B, 0x03, 0x73, 0x00, 0x83, 
+        0x00, 0x0C, 0x00, 0x0D, 0x00, 0x08, 
+        0x11, 0x1F, 0x88, 0x89, 0x00, 0x0E,
+        0xDC, 0xCC, 0x6E, 0xE6, 0xDD, 0xDD, 
+        0xD9, 0x99, 0xBB, 0xBB, 0x67, 0x63, 
+        0x6E, 0x0E, 0xEC, 0xCC, 0xDD, 0xDC, 
+        0x99, 0x9F, 0xBB, 0xB9, 0x33, 0x3E
+    };
 
-
-
+    for(unsigned i = 0; i < scrollingNintendoLogo.size(); i++){
+        if(ROM[i + NIN_LOGO_OFFSET] != scrollingNintendoLogo[i]){
+            throw GBEmuException("Not a valid GB ROM");
+        }
+    }
+    
+    if(ROM[CART_TYPE] != 0){
+        throw GBEmuException("ROM with no MBC only supported, for now");
+    } 
 }

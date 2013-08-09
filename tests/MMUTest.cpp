@@ -21,7 +21,7 @@ TEST_F(MMUTest, readByte){
     
     ASSERT_EQ(mmu->readByte(0), 0x31); //BIOS
 
-    mmu->leaveBIOS();
+    mmu->readByte(0x100); //should leave bios
 
     ASSERT_EQ(mmu->readByte(0), 0xC3); //ROM
 
@@ -37,7 +37,7 @@ TEST_F(MMUTest, readWord){
     
     ASSERT_EQ(mmu->readWord(0), 0xFE31); //BIOS
 
-    mmu->leaveBIOS();
+    mmu->readWord(0x100); //should leave bios
 
     ASSERT_EQ(mmu->readWord(0), 0x0cC3); //ROM
 
@@ -55,7 +55,7 @@ TEST_F(MMUTest, writeByte){
     
     ASSERT_THROW(mmu->writeByte(0, 0), GBEmuException); //BIOS
 
-    mmu->leaveBIOS();
+    mmu->readByte(0x100); //should leave bios
 
     ASSERT_THROW(mmu->writeByte(0, 0), GBEmuException); //ROM
 

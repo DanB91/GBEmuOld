@@ -5,12 +5,9 @@
 
 using namespace GBEmu;
 
-void MMU::leaveBIOS(){
-    inBIOS = false;
-}
 
 
-byte MMU::readByte(word address) const{
+byte MMU::readByte(word address) {
     byte value = 0;
 
 
@@ -78,6 +75,10 @@ byte MMU::readByte(word address) const{
 
         default:
             throw GBEmuException("This should be unreachable");
+    }
+
+    if(address > 0xFF){
+        inBIOS = false;
     }
 
 
@@ -156,7 +157,7 @@ void MMU::writeByte(byte value, word address){
 }
 
 
-word MMU::readWord(word address) const{
+word MMU::readWord(word address) {
     return readByte(address) | (readByte(address + 1) << 8);
 }
 

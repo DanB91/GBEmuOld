@@ -4,11 +4,14 @@
 #include <functional>
 #include <memory>
 #include "MMU.h"
+#include "opcodes.h"
 
 namespace GBEmu{
     class CPU{
 
         public:
+            //definitions
+            
             //the state of the CPU, all in one neat structure
             struct State{
 
@@ -23,19 +26,41 @@ namespace GBEmu{
 
             }; 
 
+            //represents a single opcode
+            struct Opcode{
+                std::function<void (void)> operation;
+                int cycles;
+
+                Opcode(std::function<void (void)> op, int cycles)
+                    : operation(op), cycles(cycles)
+                {}
+
+                Opcode(){};  //will remove
+
+                void operator()(){
+                    operation();
+                }
+
+            };
+
+            //methods
+
             CPU(const MMUPtr &mmu)
-                : mmu(mmu), state({0, 0})
+                : mmu(mmu), state({}),
+                opcodes({
+                        Opcode([](){}, 4)
+                        })
                 {}
 
             const State &getState() const; 
             void step();
+            void reset();
 
 
         private:
             MMUPtr mmu;
             State state;
-            std::array<std::function<void (void)>, 256> opCodes;
-            void init();
+            const std::array<Opcode, 256> opcodes;
     };
 
     typedef std::shared_ptr<CPU> CPUPtr;

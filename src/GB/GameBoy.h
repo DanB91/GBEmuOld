@@ -18,10 +18,7 @@ namespace GBEmu{
                 cpu(new CPU(mmu))
             {}
            
-            void start(); //starts the emulator
-            void reset(); //resets all values back to default, but keeps the ROM loaded
-            void pause();
-
+            void step(); //steps through one instruction
             const CPU::State &getCPUState() const;
 
         private:
