@@ -8,28 +8,26 @@
 #include "CPU.h"
 
 namespace GBEmu{
-    class GameBoy{
+  class GameBoy{
 
-        public:
-            GameBoy(const std::string &fileName)
-                :isRunning(false),
-                cart(new Cartridge(fileName)),
-                mmu(new MMU(cart)),
-                cpu(new CPU(mmu))
-            {}
-           
-            void step(); //steps through one instruction
-            const CPU::State &getCPUState() const;
+  public:
+    GameBoy(const std::string &fileName)
+      :cart(new Cartridge(fileName)),
+        mmu(new MMU(cart)),
+        cpu(new CPU(mmu))
+    {}
 
-        private:
-            bool isRunning;
-            CartridgePtr cart;
-            MMUPtr mmu;
-            CPUPtr cpu;
+    void step(); //steps through one instruction
+    const CPU::State &getCPUState() const;
 
-    };
+  private:
+    CartridgePtr cart;
+    MMUPtr mmu;
+    CPUPtr cpu;
 
-    typedef std::shared_ptr<GameBoy> GameBoyPtr;
+  };
+
+  typedef std::shared_ptr<GameBoy> GameBoyPtr;
 }
 
 #endif

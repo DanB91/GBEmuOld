@@ -1,34 +1,39 @@
 #-------------------------------------------------
 #
-# Project created by QtCreator 2013-08-10T17:04:52
+# Project created by QtCreator 2013-08-11T22:18:12
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += testlib
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+QT       -= gui
 
-TARGET = GBEmu
+TARGET = tst_gbemutest
+CONFIG   += console
+CONFIG   -= app_bundle
+
 TEMPLATE = app
 
 
-SOURCES += main.cpp\
-        mainwindow.cpp \
+SOURCES += \
+    main.cpp \
     ../../../Emulator/MMU.cpp \
     ../../../Emulator/GameBoy.cpp \
     ../../../Emulator/CPU.cpp \
     ../../../Emulator/Cartridge.cpp
+DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
-HEADERS  += mainwindow.h \
+HEADERS += \
+    CartridgeTest.h \
+    AutoTest.h \
     ../../../Emulator/types.h \
     ../../../Emulator/opcodes.h \
     ../../../Emulator/MMU.h \
     ../../../Emulator/GBEmuExceptions.h \
     ../../../Emulator/GameBoy.h \
     ../../../Emulator/CPU.h \
-    ../../../Emulator/Cartridge.h
+    ../../../Emulator/Cartridge.h \
+    MMUTest.h
 
-FORMS    += mainwindow.ui
-
+INCLUDEPATH += ../../../Emulator
 QMAKE_CXXFLAGS += -std=c++11
-CONFIG+=c++11

@@ -7,7 +7,7 @@ namespace GBEmu{
     }
 
     void CPU::step(){
-        Opcode op = opcodes[mmu->readByte(state.registers.PC)];
+        Opcode op = *opcodes[mmu->readByte(state.registers.PC)];
         op();
         state.clock.cyclesSinceLastInstruction = op.cycles;
         state.registers.PC++;
@@ -15,7 +15,7 @@ namespace GBEmu{
     }
 
     void CPU::reset(){
-        state = {};
+        state = State();
     }
 
     

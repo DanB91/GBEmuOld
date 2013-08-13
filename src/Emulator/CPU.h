@@ -16,39 +16,26 @@ namespace GBEmu{
     struct State{
 
       struct{
-        byte A, B, C, D, H, L, F;
-        word PC, SP;
+        byte A = 0, B = 0, C = 0, D = 0, H = 0, L = 0, F = 0;
+        word PC = 0, SP = 0;
       } registers;
 
       struct{
-        int cyclesSinceLastInstruction, totalCycles;
+        int cyclesSinceLastInstruction = 0, totalCycles = 0;
       } clock;
 
-    };
-
-    //represents a single opcode
-    struct Opcode{
-      std::function<void (void)> operation;
-      int cycles;
-
-      Opcode(std::function<void (void)> op, int cycles)
-        : operation(op), cycles(cycles)
-      {}
-
-      Opcode(){};  //will remove
-
-      void operator()(){
-        operation();
-      }
 
     };
+
+
+
 
     //methods
 
     CPU(const MMUPtr &mmu)
-      : mmu(mmu), state({}),
+      : mmu(mmu),
         opcodes({{
-                Opcode([](){}, 4)
+                OP([](){}, 4)
   }})
     {}
 
@@ -60,7 +47,7 @@ namespace GBEmu{
   private:
     MMUPtr mmu;
     State state;
-    const std::array<Opcode, 256> opcodes;
+    const std::array<OpcodePtr, 256> opcodes;
   };
 
   typedef std::shared_ptr<CPU> CPUPtr;
