@@ -8,7 +8,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->setupUi(this);
 }
 
+
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+
+void MainWindow::on_action_CPU_Status_triggered()
+{
+    cpuStatusWindow = new CPUStatus(this);
+    cpuStatusWindow->show();
 }

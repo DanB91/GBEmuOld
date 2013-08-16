@@ -16,11 +16,11 @@ Cartridge::Cartridge(const std::string &romFileName){
     loadROM(romFileName);
 }
 //getters
-int Cartridge::getCartType() const{
+int Cartridge::getCartType() const noexcept{
     return ROM[CART_TYPE];
 }
 
-const std::vector<byte> &Cartridge::getROM() const {
+const std::vector<byte> &Cartridge::getROM() const noexcept{
     return ROM;
 }
 

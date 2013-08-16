@@ -12,7 +12,7 @@ struct Opcode{
     : operation(op), cycles(cycles)
   {}
 
-  void operator()(){
+  void execute(){
     operation();
   }
 };

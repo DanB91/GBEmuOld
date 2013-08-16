@@ -18,7 +18,7 @@ namespace GBEmu{
     {}
 
     void step(); //steps through one instruction
-    const CPU::State &getCPUState() const;
+    const CPU::State &getCPUState() const noexcept;
 
   private:
     CartridgePtr cart;

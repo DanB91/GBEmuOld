@@ -18,8 +18,8 @@ namespace GBEmu{
             void writeROM(byte value, word address);
             void writeRAM(byte value, word address);
             
-            int getCartType() const;
-            const std::vector<byte> &getROM() const ;
+            int getCartType() const noexcept;
+            const std::vector<byte> &getROM() const noexcept ;
 
         private:
             void loadROM(const std::string &romFileName);

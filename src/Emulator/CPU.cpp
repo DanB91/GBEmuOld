@@ -2,15 +2,22 @@
 
 namespace GBEmu{
 
-    const CPU::State &CPU::getState() const{
+    const CPU::State &CPU::getState() const noexcept{
         return state;
     }
 
     void CPU::step(){
-        Opcode op = *opcodes[mmu->readByte(state.registers.PC)];
-        op();
-        state.clock.cyclesSinceLastInstruction = op.cycles;
+
+        OpcodePtr op =  opcodes[mmu->readByte(state.registers.PC)];
+
+        if(op){
+            op->execute();
+            state.clock.cyclesSinceLastInstruction = op->cycles;
+
+       }
         state.registers.PC++;
+
+
 
     }
 

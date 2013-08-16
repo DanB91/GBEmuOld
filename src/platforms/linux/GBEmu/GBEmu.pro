@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     ../../../Emulator/MMU.cpp \
     ../../../Emulator/GameBoy.cpp \
     ../../../Emulator/CPU.cpp \
-    ../../../Emulator/Cartridge.cpp
+    ../../../Emulator/Cartridge.cpp \
+    cpustatus.cpp
 
 HEADERS  += mainwindow.h \
     ../../../Emulator/types.h \
@@ -26,8 +27,13 @@ HEADERS  += mainwindow.h \
     ../../../Emulator/GBEmuExceptions.h \
     ../../../Emulator/GameBoy.h \
     ../../../Emulator/CPU.h \
-    ../../../Emulator/Cartridge.h
+    ../../../Emulator/Cartridge.h \
+    cpustatus.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    cpustatus.ui
+
+INCLUDEPATH += ../../..
 
 QMAKE_CXXFLAGS += -std=c++11
+CONFIG += c++11
