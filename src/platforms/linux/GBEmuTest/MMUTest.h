@@ -21,10 +21,11 @@ private Q_SLOTS:
 
 
 private:
-    MMUPtr mmu;
+    MMU mmu;
     void mmuReset(){
-        mmu.reset();
-        mmu = MMUPtr(new MMU(CartridgePtr(new Cartridge("/home/dan/Downloads/Tetris.gb"))));
+
+        mmu = MMU();
+        mmu.loadROM("/home/dan/Downloads/Tetris.gb");
     }
 
 };
@@ -37,15 +38,15 @@ MMUTest::MMUTest(){
 void MMUTest::readByte(){
     mmuReset();
 
-    QVERIFY(mmu->readByte(0) == 0x31); //BIOS
+    QVERIFY(mmu.readByte(0) == 0x31); //BIOS
 
-    mmu->readByte(0x100); //should leave bios
+    mmu.readByte(0x100); //should leave bios
 
-    QVERIFY(mmu->readByte(0) == 0xC3); //ROM
+    QVERIFY(mmu.readByte(0) == 0xC3); //ROM
 
-    QVERIFY(mmu->readByte(0xC044) == 0); //internal RAM
+    QVERIFY(mmu.readByte(0xC044) == 0); //internal RAM
 
-    QVERIFY_THROW(mmu->readByte(0xA445), GBEmuException ); //external RAM
+    QVERIFY_THROW(mmu.readByte(0xA445), GBEmuException ); //external RAM
 
 
 }
@@ -54,34 +55,34 @@ void MMUTest::writeWord(){
 
     mmuReset();
 
-    QVERIFY(mmu->readWord(0) == 0xFE31); //BIOS
+    QVERIFY(mmu.readWord(0) == 0xFE31); //BIOS
 
-    mmu->readWord(0x100); //should leave bios
+    mmu.readWord(0x100); //should leave bios
 
-    QVERIFY(mmu->readWord(0) == 0x0cC3); //ROM
+    QVERIFY(mmu.readWord(0) == 0x0cC3); //ROM
 
-    QVERIFY(mmu->readWord(0xC044) == 0); //internal RAM
+    QVERIFY(mmu.readWord(0xC044) == 0); //internal RAM
 
-    QVERIFY_THROW(mmu->readWord(0xA445), GBEmuException ); //external RAM
+    QVERIFY_THROW(mmu.readWord(0xA445), GBEmuException ); //external RAM
 }
 
 
 void MMUTest::writeByte(){
     mmuReset();
 
-    QVERIFY_THROW(mmu->writeByte(0, 0), GBEmuException); //BIOS
+    QVERIFY_THROW(mmu.writeByte(0, 0), GBEmuException); //BIOS
 
-    mmu->readByte(0x100); //should leave bios
+    mmu.readByte(0x100); //should leave bios
 
-    QVERIFY_THROW(mmu->writeByte(0, 0), GBEmuException); //ROM
+    QVERIFY_THROW(mmu.writeByte(0, 0), GBEmuException); //ROM
 
     //internal RAM
     for(int i = 0xC000; i < 0xFDFF; i++){
-        mmu->writeByte(i%20, i);
-        QVERIFY(mmu->readByte(i) == i%20);
+        mmu.writeByte(i%20, i);
+        QVERIFY(mmu.readByte(i) == i%20);
     }
 
-    QVERIFY_THROW(mmu->writeByte(0, 0xA000), GBEmuException); //ext ram
+    QVERIFY_THROW(mmu.writeByte(0, 0xA000), GBEmuException); //ext ram
 }
 
 DECLARE_TEST(MMUTest)

@@ -1,8 +1,7 @@
 #ifndef CPU_H
 #define CPU_H
 
-#include <functional>
-#include <memory>
+
 #include "MMU.h"
 #include "opcodes.h"
 
@@ -32,24 +31,24 @@ public:
 
     //methods
 
-    CPU(const MMUPtr &mmu)
-        : mmu(mmu)
+    CPU()
     {}
 
     const State &getState() const noexcept;
     void step();
     void reset();
+    void loadROM(const std::string &romFileName);
 
 
 private:
-    MMUPtr mmu;
+
+    MMU mmu;
     State state;
-    const std::array<OpcodePtr, 256> opcodes = {{
-                                                    OP([](){}, 4)
-                                                }};
+    std::array<Op, 256> opcodes = {{
+                                             Op([](){}, 4)
+                                         }};
 };
 
-typedef std::shared_ptr<CPU> CPUPtr;
 }
 
 #endif

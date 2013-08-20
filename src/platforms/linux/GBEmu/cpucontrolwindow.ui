@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>CPUStatus</class>
- <widget class="QMainWindow" name="CPUStatus">
+ <class>CPUControlWindow</class>
+ <widget class="QMainWindow" name="CPUControlWindow">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -45,7 +45,7 @@
      <rect>
       <x>15</x>
       <y>21</y>
-      <width>81</width>
+      <width>247</width>
       <height>239</height>
      </rect>
     </property>

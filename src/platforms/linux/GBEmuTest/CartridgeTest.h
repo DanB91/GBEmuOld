@@ -20,14 +20,14 @@ private Q_SLOTS:
     void readROM();
 
 private:
-    CartridgePtr cart;
+    Cartridge cart;
     std::string fn = "/home/dan/Downloads/Tetris.gb";
 
 };
 
 CartridgeTest::CartridgeTest()
 {
-    cart = CartridgePtr(new Cartridge(fn));
+    cart.loadROM(fn);
 }
 
 void CartridgeTest::loadROM(){
@@ -38,7 +38,7 @@ void CartridgeTest::loadROM(){
     QByteArray rom = f.readAll();
 
     for(int i = 0; i < rom.size(); i++){
-        byte b1 = rom[i], b2 = cart->getROM()[i];
+        byte b1 = rom[i], b2 = cart.getROM()[i];
 
         //files should be read in correctly
         QVERIFY2(b1 == b2, QString("i: %1, TestRom: %2X, CartRom: %3X").
@@ -49,8 +49,8 @@ void CartridgeTest::loadROM(){
 }
 
 void CartridgeTest::readROM(){
-    QVERIFY_THROW(cart->readROM(0x8000), GBEmuException);
-    QVERIFY(cart->readROM(0) == 0xC3);
+    QVERIFY_THROW(cart.readROM(0x8000), GBEmuException);
+    QVERIFY(cart.readROM(0) == 0xC3);
 }
 
 

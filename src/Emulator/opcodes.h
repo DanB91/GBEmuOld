@@ -1,28 +1,40 @@
 #ifndef OPCODE_H
 #define OPCODE_H
 
-#include <memory>
+#include <functional>
+namespace GBEmu {
+
 
 //represents a single opcode
-struct Opcode{
-  std::function<void (void)> operation;
-  int cycles;
+class Op{
 
-  Opcode(std::function<void (void)> op, int cycles)
-    : operation(op), cycles(cycles)
-  {}
+public:
+    Op(std::function<void (void)> op, int cycles)
+        : operation(op), cycles(cycles), isImplemented(true)
+    {}
 
-  void execute(){
-    operation();
-  }
+    Op()
+        :isImplemented(false)
+    {}  //will remove eventually
+
+    void operator()() const{
+        if(isImplemented){
+            operation();
+        }
+
+    }
+
+    int getCycles() const noexcept{
+        return cycles;
+    }
+
+private:
+
+    std::function<void (void)> operation;
+    int cycles;
+    bool isImplemented; //if not implemented, this opcode is not executed
 };
-typedef std::shared_ptr<Opcode> OpcodePtr;
 
-#define OP(op, cycles) OpcodePtr(new Opcode(op, cycles))
-
-#define OPCODES {{ \
-    /*NOP*/ OP([](){}, 4), \
-}}
-
+}
 
 #endif

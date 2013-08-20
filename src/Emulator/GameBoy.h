@@ -2,32 +2,27 @@
 #define GAMEBOY_H
 
 #include <string>
-#include <memory>
-#include "MMU.h"
-#include "Cartridge.h"
 #include "CPU.h"
 
 namespace GBEmu{
   class GameBoy{
 
   public:
-    GameBoy(const std::string &fileName)
-      :cart(new Cartridge(fileName)),
-        mmu(new MMU(cart)),
-        cpu(new CPU(mmu))
+    GameBoy()
+        : romLoaded(false)
     {}
 
     void step(); //steps through one instruction
     const CPU::State &getCPUState() const noexcept;
+    void loadROM(const std::string &romFileName);
+    bool isROMLoaded() const noexcept;
 
   private:
-    CartridgePtr cart;
-    MMUPtr mmu;
-    CPUPtr cpu;
+    CPU cpu;
+    bool romLoaded;
 
   };
 
-  typedef std::shared_ptr<GameBoy> GameBoyPtr;
 }
 
 #endif

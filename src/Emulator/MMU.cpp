@@ -6,7 +6,6 @@
 using namespace GBEmu;
 
 
-
 byte MMU::readByte(word address) {
     byte value = 0;
 
@@ -17,7 +16,7 @@ byte MMU::readByte(word address) {
             if(this->inBIOS && address < 0x100){
                 value = BIOS[address];
             } else {
-                value = cart->readROM(address);
+                value = cart.readROM(address);
             }
             break;
 
@@ -25,7 +24,7 @@ byte MMU::readByte(word address) {
 
             //ROM Bank 1
         case 0x4000: case 0x5000: case 0x6000: case 0x7000:
-            value = cart->readROM(address);
+            value = cart.readROM(address);
             break;
 
         case 0x8000: case 0x9000:
@@ -35,7 +34,7 @@ byte MMU::readByte(word address) {
 
             //cart RAM
         case 0xA000: case 0xB000:
-            value = cart->readRAM(address);
+            value = cart.readRAM(address);
             break;
 
             //internal RAM
@@ -94,7 +93,7 @@ void MMU::writeByte(byte value, word address){
             if(this->inBIOS && address < 0x100){
                 throw GBEmuException("Writing to BIOS...");
             } else {
-                cart->writeROM(value, address);
+                cart.writeROM(value, address);
             }
             break;
 
@@ -102,7 +101,7 @@ void MMU::writeByte(byte value, word address){
 
             //ROM Bank 1
         case 0x4000: case 0x5000: case 0x6000: case 0x7000:
-            cart->writeROM(value, address);
+            cart.writeROM(value, address);
             break;
 
         case 0x8000: case 0x9000:
@@ -112,7 +111,7 @@ void MMU::writeByte(byte value, word address){
 
             //cart RAM
         case 0xA000: case 0xB000:
-            cart->writeRAM(value, address);
+            cart.writeRAM(value, address);
             break;
 
             //internal RAM
@@ -162,7 +161,15 @@ word MMU::readWord(word address) {
 }
 
 void MMU::writeWord(word value, word address){
+    writeByte(value & 0xFF, address);  //little endian
+    writeByte((value & 0xFF00) >> 8, address + 1);
 }
+
+void MMU::loadROM(const std::string &romFileName){
+    cart.loadROM(romFileName);
+}
+
+
 
 
 

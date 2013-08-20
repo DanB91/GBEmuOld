@@ -7,28 +7,30 @@
 #include "types.h"
 
 namespace GBEmu{
-    class Cartridge{
-        public:
+class Cartridge{
+public:
 
-            Cartridge(const std::string &romFileName);
-            
-            byte readROM(word address) const;
-            byte readRAM(word address) const;
+    Cartridge()
+    {}
 
-            void writeROM(byte value, word address);
-            void writeRAM(byte value, word address);
-            
-            int getCartType() const noexcept;
-            const std::vector<byte> &getROM() const noexcept ;
+    byte readROM(word address) const;
+    byte readRAM(word address) const;
 
-        private:
-            void loadROM(const std::string &romFileName);
+    void writeROM(byte value, word address);
+    void writeRAM(byte value, word address);
 
-            std::vector<byte> ROM;
-
-    };
+    int getCartType() const noexcept;
+    const std::vector<byte> &getROM() const noexcept ;
 
 
-    typedef std::shared_ptr<Cartridge> CartridgePtr;
+    void loadROM(const std::string &romFileName);
+
+private:
+    std::vector<byte> ROM;
+
+};
+
+
+typedef std::shared_ptr<Cartridge> CartridgePtr;
 }
 #endif

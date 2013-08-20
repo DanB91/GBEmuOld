@@ -12,9 +12,6 @@ using namespace GBEmu;
 
 static void verifyROM(const std::vector<byte>&);
 
-Cartridge::Cartridge(const std::string &romFileName){
-    loadROM(romFileName);
-}
 //getters
 int Cartridge::getCartType() const noexcept{
     return ROM[CART_TYPE];

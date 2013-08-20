@@ -18,7 +18,7 @@ SOURCES += main.cpp\
     ../../../Emulator/GameBoy.cpp \
     ../../../Emulator/CPU.cpp \
     ../../../Emulator/Cartridge.cpp \
-    cpustatus.cpp
+    cpucontrolwindow.cpp
 
 HEADERS  += mainwindow.h \
     ../../../Emulator/types.h \
@@ -28,10 +28,10 @@ HEADERS  += mainwindow.h \
     ../../../Emulator/GameBoy.h \
     ../../../Emulator/CPU.h \
     ../../../Emulator/Cartridge.h \
-    cpustatus.h
+    cpucontrolwindow.h
 
 FORMS    += mainwindow.ui \
-    cpustatus.ui
+    cpucontrolwindow.ui
 
 INCLUDEPATH += ../../..
 
