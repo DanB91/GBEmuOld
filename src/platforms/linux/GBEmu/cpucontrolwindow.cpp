@@ -1,5 +1,5 @@
 #include "cpucontrolwindow.h"
-#include "ui_cpustatus.h"
+#include "ui_cpucontrolwindow.h"
 
 CPUControlWindow::CPUControlWindow(QWidget *parent, GBEmu::GameBoy *gb) :
     QMainWindow(parent),
