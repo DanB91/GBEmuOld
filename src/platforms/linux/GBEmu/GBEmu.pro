@@ -18,17 +18,18 @@ SOURCES += main.cpp\
     ../../../Emulator/GameBoy.cpp \
     ../../../Emulator/CPU.cpp \
     ../../../Emulator/Cartridge.cpp \
-    cpucontrolwindow.cpp
+    cpucontrolwindow.cpp \
+    ../../../Emulator/CPUDebugInfo.cpp
 
 HEADERS  += mainwindow.h \
     ../../../Emulator/types.h \
-    ../../../Emulator/opcodes.h \
     ../../../Emulator/MMU.h \
     ../../../Emulator/GBEmuExceptions.h \
     ../../../Emulator/GameBoy.h \
     ../../../Emulator/CPU.h \
     ../../../Emulator/Cartridge.h \
-    cpucontrolwindow.h
+    cpucontrolwindow.h \
+    ../../../Emulator/CPUDebugInfo.h
 
 FORMS    += mainwindow.ui \
     cpucontrolwindow.ui

@@ -19,6 +19,7 @@ public:
 private slots:
     void indicateROMIsLoaded();
     void indicateROMIsNotLoaded();
+    void updateData();
 
 private:
     Ui::CPUControlWindow *ui;

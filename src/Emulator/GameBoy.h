@@ -3,25 +3,31 @@
 
 #include <string>
 #include "CPU.h"
+#include "CPUDebugInfo.h"
 
 namespace GBEmu{
-  class GameBoy{
+class GameBoy{
 
-  public:
-    GameBoy()
-        : romLoaded(false)
-    {}
+public:
+
+    GameBoy();
+    const CPU::State &getCPUState() const noexcept;
+    const CPUDebugInfo &getCPUDebugInfo() const noexcept;
 
     void step(); //steps through one instruction
-    const CPU::State &getCPUState() const noexcept;
     void loadROM(const std::string &romFileName);
     bool isROMLoaded() const noexcept;
 
-  private:
+
+private:
     CPU cpu;
     bool romLoaded;
+    CPUDebugInfo cpuDebugInfo;
 
-  };
+
+
+
+};
 
 }
 

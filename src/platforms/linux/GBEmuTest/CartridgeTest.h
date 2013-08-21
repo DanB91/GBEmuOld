@@ -21,7 +21,7 @@ private Q_SLOTS:
 
 private:
     Cartridge cart;
-    std::string fn = "/home/dan/Downloads/Tetris.gb";
+    std::string fn = "Tetris.gb";
 
 };
 

@@ -25,7 +25,7 @@ private:
     void mmuReset(){
 
         mmu = MMU();
-        mmu.loadROM("/home/dan/Downloads/Tetris.gb");
+        mmu.loadROM("Tetris.gb");
     }
 
 };
@@ -40,7 +40,7 @@ void MMUTest::readByte(){
 
     QVERIFY(mmu.readByte(0) == 0x31); //BIOS
 
-    mmu.readByte(0x100); //should leave bios
+    mmu.leaveBIOS(); //should leave bios
 
     QVERIFY(mmu.readByte(0) == 0xC3); //ROM
 
@@ -57,7 +57,7 @@ void MMUTest::writeWord(){
 
     QVERIFY(mmu.readWord(0) == 0xFE31); //BIOS
 
-    mmu.readWord(0x100); //should leave bios
+    mmu.leaveBIOS(); //should leave bios
 
     QVERIFY(mmu.readWord(0) == 0x0cC3); //ROM
 
@@ -72,7 +72,7 @@ void MMUTest::writeByte(){
 
     QVERIFY_THROW(mmu.writeByte(0, 0), GBEmuException); //BIOS
 
-    mmu.readByte(0x100); //should leave bios
+    mmu.leaveBIOS(); //should leave bios
 
     QVERIFY_THROW(mmu.writeByte(0, 0), GBEmuException); //ROM
 

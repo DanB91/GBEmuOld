@@ -27,7 +27,6 @@ HEADERS += \
     CartridgeTest.h \
     AutoTest.h \
     ../../../Emulator/types.h \
-    ../../../Emulator/opcodes.h \
     ../../../Emulator/MMU.h \
     ../../../Emulator/GBEmuExceptions.h \
     ../../../Emulator/GameBoy.h \
