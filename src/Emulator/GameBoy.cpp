@@ -1,9 +1,10 @@
 #include "GameBoy.h"
+#include "GBEmuExceptions.h"
 
 using namespace GBEmu;
 
 GameBoy::GameBoy()
-    : romLoaded(false), cpuDebugInfo(&cpu)
+    : romLoaded(false)
 {}
 
 void GameBoy::loadROM(const std::string &romFileName){
@@ -11,17 +12,18 @@ void GameBoy::loadROM(const std::string &romFileName){
     romLoaded = true;
 }
 
-const CPU::State &GameBoy::getCPUState() const noexcept{
-    return cpu.getState();
+const CPU &GameBoy::getCPU() const noexcept{
+    return cpu;
 
 }
 
-const CPUDebugInfo &GameBoy::getCPUDebugInfo() const noexcept{
-    return cpuDebugInfo;
-}
 
 void GameBoy::step(){
-    cpu.step();
+    if(romLoaded){
+        cpu.step();
+    } else{
+        throw ROMNotLoadedException(); //should not step until ROM is loaded
+    }
 }
 
 bool GameBoy::isROMLoaded() const noexcept{

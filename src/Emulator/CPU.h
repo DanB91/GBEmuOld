@@ -29,17 +29,19 @@ private:
     class Op{
 
     public:
-        Op(std::function<void (void)> op, int cycles);
+        Op(std::function<void (void)> op, int cycles, int size);
         Op();
 
         void operator()() const; //execute instruction
         int getCycles() const noexcept; //get cycles this instruction takes
+        int getSize() const noexcept; //get size of instruction
 
     private:
 
         std::function<void (void)> operation;
         int cycles;
         bool isImplemented; //if not implemented, this opcode is not executed
+        int size;  //size of instruction in bytes
     };
 
 

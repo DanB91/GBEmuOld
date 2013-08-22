@@ -11,8 +11,7 @@ class GameBoy{
 public:
 
     GameBoy();
-    const CPU::State &getCPUState() const noexcept;
-    const CPUDebugInfo &getCPUDebugInfo() const noexcept;
+    const CPU &getCPU() const noexcept;
 
     void step(); //steps through one instruction
     void loadROM(const std::string &romFileName);
@@ -22,7 +21,6 @@ public:
 private:
     CPU cpu;
     bool romLoaded;
-    CPUDebugInfo cpuDebugInfo;
 
 
 

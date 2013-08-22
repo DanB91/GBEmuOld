@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include "Emulator/GameBoy.h"
+#include "Emulator/CPUDebugInfo.h"
 
 namespace Ui {
 class CPUControlWindow;
@@ -21,9 +22,12 @@ private slots:
     void indicateROMIsNotLoaded();
     void updateData();
 
+    void on_step_clicked();
+
 private:
     Ui::CPUControlWindow *ui;
     GBEmu::GameBoy *gameBoy;
+    GBEmu::CPUDebugInfo cpuInfo;
 };
 
 #endif // CPUSTATUS_H

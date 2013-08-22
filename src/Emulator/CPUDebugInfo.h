@@ -1,7 +1,7 @@
 #ifndef CPUDEBUGINFO_H
 #define CPUDEBUGINFO_H
 
-#include "CPU.h"
+#include "GameBoy.h"
 
 
 
@@ -10,12 +10,13 @@
  * of values in registers and other such stuff.
  */
 namespace GBEmu{
+
+class GameBoy;
+
 class CPUDebugInfo
 {
 public:
-    CPUDebugInfo(CPU *cpu)
-        :cpu(cpu)
-    {}
+    CPUDebugInfo(GameBoy *gameBoy);
 
     std::string getA() const noexcept;
     std::string getB() const noexcept;
@@ -34,7 +35,7 @@ public:
 
 
 private:
-    CPU *cpu;
+    GameBoy *gameBoy;
 };
 
 

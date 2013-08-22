@@ -1,9 +1,11 @@
 #include "cpucontrolwindow.h"
 #include "ui_cpucontrolwindow.h"
+#include "Emulator/GBEmuExceptions.h"
+#include <QMessageBox>
 
 CPUControlWindow::CPUControlWindow(QWidget *parent, GBEmu::GameBoy *gb) :
     QMainWindow(parent),
-    ui(new Ui::CPUControlWindow), gameBoy(gb)
+    ui(new Ui::CPUControlWindow), gameBoy(gb), cpuInfo(gb)
 {
     ui->setupUi(this);
 
@@ -35,17 +37,27 @@ void CPUControlWindow::indicateROMIsNotLoaded(){
 }
 
 void CPUControlWindow::updateData(){
-    ui->aValue->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getA()));
-    ui->bValue->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getB()));
-    ui->cValue->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getC()));
-    ui->dValue->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getD()));
-    ui->eValue->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getE()));
-    ui->fValue->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getF()));
-    ui->spValue->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getSP()));
-    ui->pcValue->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getPC()));
-    ui->totalCycles->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getTotalCycles()));
-    ui->currentInstruction->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getCurrentInstruction()));
-    ui->cyclesOfLastInstruction->setText(QString::fromStdString(gameBoy->getCPUDebugInfo().getCyclesSinceLastInstruction()));
+    ui->aValue->setText(QString::fromStdString(cpuInfo.getA()));
+    ui->bValue->setText(QString::fromStdString(cpuInfo.getB()));
+    ui->cValue->setText(QString::fromStdString(cpuInfo.getC()));
+    ui->dValue->setText(QString::fromStdString(cpuInfo.getD()));
+    ui->eValue->setText(QString::fromStdString(cpuInfo.getE()));
+    ui->fValue->setText(QString::fromStdString(cpuInfo.getF()));
+    ui->spValue->setText(QString::fromStdString(cpuInfo.getSP()));
+    ui->pcValue->setText(QString::fromStdString(cpuInfo.getPC()));
+    ui->totalCycles->setText(QString::fromStdString(cpuInfo.getTotalCycles()));
+    ui->currentInstruction->setText(QString::fromStdString(cpuInfo.getCurrentInstruction()));
+    ui->cyclesOfLastInstruction->setText(QString::fromStdString(cpuInfo.getCyclesSinceLastInstruction()));
 }
 
 
+
+void CPUControlWindow::on_step_clicked()
+{
+    try{
+        gameBoy->step();
+        updateData();
+    } catch(GBEmu::GBEmuException &e){
+        QMessageBox::critical(this, "Error", e.what());
+    }
+}
