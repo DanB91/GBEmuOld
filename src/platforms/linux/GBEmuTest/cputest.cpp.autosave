@@ -1,0 +1,18 @@
+#include "cputest.h"
+
+CPUTest::CPUTest()
+{
+
+}
+
+void CPUTest::op01(){ //LD BC d16
+    const MMU &mmu = cpu.getMMU();
+    mmu.writeByte(1, 0xC000);
+    mmu.writeWord(0x300, 0xC001);
+    
+    
+}
+
+void CPUTest::op02(){
+
+}

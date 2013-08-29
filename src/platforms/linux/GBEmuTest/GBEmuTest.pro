@@ -20,7 +20,8 @@ SOURCES += \
     ../../../Emulator/MMU.cpp \
     ../../../Emulator/GameBoy.cpp \
     ../../../Emulator/CPU.cpp \
-    ../../../Emulator/Cartridge.cpp
+    ../../../Emulator/Cartridge.cpp \
+    cputest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 
 HEADERS += \
@@ -32,7 +33,8 @@ HEADERS += \
     ../../../Emulator/GameBoy.h \
     ../../../Emulator/CPU.h \
     ../../../Emulator/Cartridge.h \
-    MMUTest.h
+    MMUTest.h \
+    cputest.h
 
 INCLUDEPATH += ../../../Emulator
 QMAKE_CXXFLAGS += -std=c++11

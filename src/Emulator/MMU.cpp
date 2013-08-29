@@ -174,12 +174,12 @@ void MMU::writeByte(byte value, word address){
 
 
 word MMU::readWord(word address) const {
-    return readByte(address) | (readByte(address + 1) << 8);
+    return word(readByte(address + 1), readByte(address));
 }
 
 void MMU::writeWord(word value, word address){
-    writeByte(value & 0xFF, address);  //little endian
-    writeByte((value & 0xFF00) >> 8, address + 1);
+    writeByte(value.low(), address);  //little endian
+    writeByte(value.high(), address + 1);
 }
 
 void MMU::loadROM(const std::string &romFileName){

@@ -3,6 +3,7 @@
 #include "AutoTest.h"
 #include "MMU.h"
 #include "GBEmuExceptions.h"
+#include <QDebug>
 
 using namespace GBEmu;
 
@@ -36,6 +37,8 @@ MMUTest::MMUTest(){
 }
 
 void MMUTest::readByte(){
+
+
     mmuReset();
 
     QVERIFY(mmu.readByte(0) == 0x31); //BIOS

@@ -9,21 +9,6 @@ namespace GBEmu{
 class CPU{
 
     //inner type definitions
-public:
-    //the state of the CPU, all in one neat structure
-    struct State{
-
-        struct{
-            byte A = 0, B = 0, C = 0, D = 0, E = 0, H = 0, L = 0, F = 0;
-            word PC = 0, SP = 0;
-        } registers;
-
-        struct{
-            int cyclesSinceLastInstruction = 0, totalCycles = 0;
-        } clock;
-
-
-    };
 private:
     //represents a single instruction
     class Op{
@@ -51,17 +36,29 @@ public:
 
     CPU();
 
-    const State &getState() const noexcept;
     const MMU &getMMU() const noexcept;
+    word getAF() const noexcept;
+    word getBC() const noexcept;
+    word getDE() const noexcept;
+    word getHL() const noexcept;
+    word getSP() const noexcept;
+    word getPC() const noexcept;
+    int getCyclesSinceLastInstruction() const noexcept;
+    int getTotalCycles() const noexcept;
+
     void step();
-    void reset();
     void loadROM(const std::string &romFileName);
 
 
 private:
     MMU mmu;
-    State state;
     std::array<Op, 256> opcodes;
+
+    //registers
+    word AF, BC, DE, HL, PC, SP;
+
+    //clock
+    int cyclesSinceLastInstruction = 0, totalCycles = 0;
 };
 
 }

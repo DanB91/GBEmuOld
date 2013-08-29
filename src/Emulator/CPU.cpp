@@ -2,49 +2,77 @@
 
 using namespace GBEmu;
 
-static inline void LD(byte &register1, byte value1, byte &register2, byte value2){
-    register1 = value1;
-    register2 = value2;
-}
 
 CPU::CPU()
     :opcodes({{
              Op([](){}, 4, 1), //NOP
              Op([&](){ //LD BC, NN
-    LD(state.registers.C, mmu.readByte(state.registers.PC + 1),
-       state.registers.B, mmu.readByte(state.registers.PC + 2));
+    BC = mmu.readWord(PC + 1);
+
 },
-12, 3)
+12, 3),
+             Op([&](){ //LD (BC), A
+    mmu.writeByte(AF.high(), BC);
+},8, 1)
+
 
              }})
 
 {}
-const CPU::State &CPU::getState() const noexcept{
-    return state;
-}
+
 
 const MMU &CPU::getMMU() const noexcept{
     return mmu;
 }
 
+word CPU::getAF() const noexcept{
+    return AF;
+}
+
+word CPU::getBC() const noexcept{
+    return BC;
+}
+
+word CPU::getDE() const noexcept{
+    return DE;
+}
+
+word CPU::getHL() const noexcept{
+    return HL;
+}
+
+word CPU::getSP() const noexcept{
+    return SP;
+}
+
+word CPU::getPC() const noexcept{
+    return PC;
+}
+
+int CPU::getCyclesSinceLastInstruction() const noexcept{
+    return cyclesSinceLastInstruction;
+}
+
+int CPU::getTotalCycles() const noexcept{
+    return totalCycles;
+}
+
 void CPU::step(){
 
-    const Op &op =  opcodes[mmu.readByte(state.registers.PC)];
+    const Op &op =  opcodes[mmu.readByte(PC)];
+
 
     op(); //execute opcode
-    state.clock.cyclesSinceLastInstruction = op.getCycles(); //how many cycles did this operation take?
-    state.clock.totalCycles +=  op.getCycles();
+    cyclesSinceLastInstruction = op.getCycles(); //how many cycles did this operation take?
+    totalCycles +=  op.getCycles();
 
-    state.registers.PC += op.getSize(); //go to next instruction
+    PC += op.getSize(); //go to next instruction
 
-    if(state.registers.PC == 0x100){
+    if(PC == 0x100){
         mmu.leaveBIOS();
     }
 }
 
-void CPU::reset(){
-    state = State();
-}
 
 void CPU::loadROM(const std::string &romFileName){
     mmu.loadROM(romFileName);
