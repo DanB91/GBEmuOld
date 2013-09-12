@@ -5,6 +5,10 @@
 
 using namespace GBEmu;
 
+MMU::UPtr MMU::makeMMU(){
+    return UPtr(new MMU());
+}
+
 MMU::MMU():
     inBIOS(true),   workingRAM({{0}}), zeroPageRAM({{0}}),
     BIOS({{

@@ -15,13 +15,17 @@ namespace GBEmu{
 class MMU{
 public:
 
+    typedef std::unique_ptr<MMU> UPtr;
+
+    static UPtr makeMMU();
+
     MMU();
 
-    byte readByte(word address) const;
-    void writeByte(byte value, word address);
+    virtual byte readByte(word address) const;
+    virtual void writeByte(byte value, word address);
 
-    word readWord(word address) const;
-    void writeWord(word value, word address);
+    virtual word readWord(word address) const;
+    virtual void writeWord(word value, word address);
 
     void loadROM(const std::string &romFileName);
 

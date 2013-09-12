@@ -3,8 +3,33 @@
 
 #include "AutoTest.h"
 #include "CPU.h"
+#include <array>
 
 using namespace GBEmu;
+
+class FakeMMU : public MMU{
+public:
+    byte readByte(word address) const override{
+        return fakeRAM[address];
+    }
+
+    void writeByte(byte value, word address) override{
+        fakeRAM[address] = value;
+    }
+
+    word readWord(word address) const override{
+        return word(fakeRAM[address + 1], fakeRAM[address]);
+    }
+
+    void writeWord(word value, word address) override{
+        fakeRAM[address] = value.low();
+        fakeRAM[address + 1] = value.high();
+    }
+
+private:
+    std::array<byte,256> fakeRAM;
+
+};
 
 class CPUTest : public QObject
 {
@@ -19,6 +44,7 @@ class CPUTest : public QObject
 
     private:
         CPU cpu;
+
 };
 
 DECLARE_TEST(CPUTest)

@@ -4,16 +4,41 @@
 
 #include "MMU.h"
 
+class CPUTest;
 
 namespace GBEmu{
 class CPU{
+    friend class ::CPUTest;
 
-    //inner type definitions
+public:
+    typedef std::unique_ptr<CPU> UPtr;
+
+    static UPtr makeCPU();
+
+    CPU(MMU::UPtr m);
+
+    MMU &getMMU() const noexcept;
+    word getAF() const noexcept;
+    word getBC() const noexcept;
+    word getDE() const noexcept;
+    word getHL() const noexcept;
+    word getSP() const noexcept;
+    word getPC() const noexcept;
+    int getCyclesSinceLastInstruction() const noexcept;
+    int getTotalCycles() const noexcept;
+
+    void step();
+    void loadROM(const std::string &romFileName);
+
+
+
 private:
+
     //represents a single instruction
     class Op{
 
     public:
+
         Op(std::function<void (void)> op, int cycles, int size);
         Op();
 
@@ -29,29 +54,7 @@ private:
         int size;  //size of instruction in bytes
     };
 
-
-
-//rest of class definition
-public:
-
-    CPU();
-
-    const MMU &getMMU() const noexcept;
-    word getAF() const noexcept;
-    word getBC() const noexcept;
-    word getDE() const noexcept;
-    word getHL() const noexcept;
-    word getSP() const noexcept;
-    word getPC() const noexcept;
-    int getCyclesSinceLastInstruction() const noexcept;
-    int getTotalCycles() const noexcept;
-
-    void step();
-    void loadROM(const std::string &romFileName);
-
-
-private:
-    MMU mmu;
+    MMU::UPtr mmu;
     std::array<Op, 256> opcodes;
 
     //registers
@@ -59,6 +62,7 @@ private:
 
     //clock
     int cyclesSinceLastInstruction = 0, totalCycles = 0;
+
 };
 
 }

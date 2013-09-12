@@ -19,8 +19,9 @@ public:
 
 
 private:
-    CPU cpu;
     bool romLoaded;
+    CPU::UPtr cpu;
+
 
 
 

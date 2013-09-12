@@ -3,26 +3,32 @@
 using namespace GBEmu;
 
 
-CPU::CPU()
-    :opcodes({{
-             Op([](){}, 4, 1), //NOP
-             Op([&](){ //LD BC, NN
-    BC = mmu.readWord(PC + 1);
+CPU::UPtr CPU::makeCPU()
+{
+    return UPtr(new CPU(MMU::makeMMU()));
+}
+
+CPU::CPU(MMU::UPtr m)
+    :mmu(std::move(m)),
+      opcodes({{
+              Op([](){}, 4, 1), //NOP
+              Op([&](){ //LD BC, NN
+    BC = mmu->readWord(PC + 1);
 
 },
 12, 3),
-             Op([&](){ //LD (BC), A
-    mmu.writeByte(AF.high(), BC);
+              Op([&](){ //LD (BC), A
+    mmu->writeByte(AF.high(), BC);
 },8, 1)
 
 
-             }})
+              }})
 
 {}
 
 
-const MMU &CPU::getMMU() const noexcept{
-    return mmu;
+MMU &CPU::getMMU() const noexcept{
+    return *mmu;
 }
 
 word CPU::getAF() const noexcept{
@@ -59,7 +65,7 @@ int CPU::getTotalCycles() const noexcept{
 
 void CPU::step(){
 
-    const Op &op =  opcodes[mmu.readByte(PC)];
+    const Op &op =  opcodes[mmu->readByte(PC)];
 
 
     op(); //execute opcode
@@ -69,13 +75,13 @@ void CPU::step(){
     PC += op.getSize(); //go to next instruction
 
     if(PC == 0x100){
-        mmu.leaveBIOS();
+        mmu->leaveBIOS();
     }
 }
 
 
 void CPU::loadROM(const std::string &romFileName){
-    mmu.loadROM(romFileName);
+    mmu->loadROM(romFileName);
 }
 
 
