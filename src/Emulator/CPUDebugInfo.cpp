@@ -18,35 +18,35 @@ CPUDebugInfo::CPUDebugInfo(GameBoy *gb)
     {}
 
 std::string CPUDebugInfo::getA() const noexcept{
-    return toString(gameBoy->getCPU().getAF().high());
+    return toString(highByte(gameBoy->getCPU().getAF()));
 }
 
 std::string CPUDebugInfo::getB() const noexcept{
-    return toString(gameBoy->getCPU().getBC().high());
+    return toString(highByte(gameBoy->getCPU().getBC()));
 }
 
 std::string CPUDebugInfo::getC() const noexcept{
-    return toString(gameBoy->getCPU().getBC().low());
+    return toString(lowByte(gameBoy->getCPU().getBC()));
 }
 
 std::string CPUDebugInfo::getD() const noexcept{
-    return toString(gameBoy->getCPU().getDE().high());
+    return toString(highByte(gameBoy->getCPU().getDE()));
 }
 
 std::string CPUDebugInfo::getE() const noexcept{
-    return toString(gameBoy->getCPU().getDE().low());
+    return toString(lowByte(gameBoy->getCPU().getDE()));
 }
 
 std::string CPUDebugInfo::getF() const noexcept{
-    return toString(gameBoy->getCPU().getAF().low());
+    return toString(lowByte(gameBoy->getCPU().getAF()));
 }
 
 std::string CPUDebugInfo::getH() const noexcept{
-    return toString(gameBoy->getCPU().getHL().high());
+    return toString(highByte(gameBoy->getCPU().getHL()));
 }
 
 std::string CPUDebugInfo::getL() const noexcept{
-    return toString(gameBoy->getCPU().getHL().low());
+    return toString(lowByte(gameBoy->getCPU().getHL()));
 }
 
 std::string CPUDebugInfo::getSP() const noexcept{

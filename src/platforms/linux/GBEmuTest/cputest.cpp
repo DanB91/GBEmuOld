@@ -28,6 +28,31 @@ void CPUTest::op02(){ //LD (BC) A
     QCOMPARE(int(cpu.mmu->readByte(0x10)), 3);
 
     cpu.PC = 0;
+    cpu.AF = 0;
+    cpu.BC = 0;
 
 
+}
+
+void CPUTest::op03(){ //INC B
+    cpu.mmu->writeByte(3, 0);
+    cpu.BC = 4;
+    cpu.step();
+
+    QCOMPARE(int(cpu.BC), 5);
+
+    cpu.BC = 0;
+    cpu.PC = 0;
+
+}
+
+void CPUTest::op04(){ //INC BC
+    cpu.mmu->writeByte(4,0);
+    setHighByte(cpu.BC, 4);
+    cpu.step();
+
+    QCOMPARE(int(highByte(cpu.BC)), 5);
+
+    cpu.PC = 0;
+    cpu.BC = 0;
 }

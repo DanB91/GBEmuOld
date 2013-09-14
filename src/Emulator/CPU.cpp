@@ -18,8 +18,14 @@ CPU::CPU(MMU::UPtr m)
 },
 12, 3),
               Op([&](){ //LD (BC), A
-    mmu->writeByte(AF.high(), BC);
-},8, 1)
+    mmu->writeByte(highByte(AF), BC);
+},8, 1),
+              Op([&](){ // INC BC
+    BC++;
+}, 8, 1),
+              Op([&](){ //INC B
+    setHighByte(BC, highByte(BC) + 1);
+}, 8, 1),
 
 
               }})

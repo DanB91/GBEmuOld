@@ -18,12 +18,12 @@ public:
     }
 
     word readWord(word address) const override{
-        return word(fakeRAM[address + 1], fakeRAM[address]);
+        return wordFromBytes(fakeRAM[address + 1], fakeRAM[address]);
     }
 
     void writeWord(word value, word address) override{
-        fakeRAM[address] = value.low();
-        fakeRAM[address + 1] = value.high();
+        fakeRAM[address] = lowByte(value);
+        fakeRAM[address + 1] = highByte(value);
     }
 
 private:
@@ -41,6 +41,8 @@ class CPUTest : public QObject
     private slots:
         void op01();
         void op02();
+        void op03();
+        void op04();
 
     private:
         CPU cpu;

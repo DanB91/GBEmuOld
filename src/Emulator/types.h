@@ -5,45 +5,24 @@
 
 namespace GBEmu{
 
-    typedef uint8_t byte;
+typedef uint8_t byte;
+typedef uint16_t word;
 
-    //big-endian 2-byte value
-    class word{
-        public:
-            inline  word(uint16_t value) noexcept
-                :value(value)
-            {}
+inline byte lowByte(word w){
+    return w & 0xFF;
+}
 
-            inline word(byte h, byte l)
+inline byte highByte(word w){
+    return (w >> 8) & 0xFF;
+}
 
-            {
-                value = (h << 8) | l;
-            }
+inline word wordFromBytes(byte high, byte low){
+    return (high << 8) | low;
+}
 
-            inline  word() noexcept
-                :value(0)
-            {}
-
-
-            inline operator uint16_t&() noexcept{
-                return value;
-            }
-
-            inline byte high(){
-                return (value >> 8) & 0xFF;
-            }
-
-            inline byte low(){
-                return value & 0xFF;
-            }
-
-        private:
-            uint16_t value;
-
-
-
-
-    };
+inline void setHighByte(word &w, byte b){
+    w = (b << 8) |(w & 0xFF);
+}
 
 }
 
