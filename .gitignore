@@ -6,5 +6,5 @@ build
 .clang_complete
 Testing
 /src/platforms/macosx/GBEmu/dist/
-build-GBEmu-Desktop-Debug/
+GBEmu-build-Desktop-Debug/
 build-GBEmuTest-Desktop-Debug/
