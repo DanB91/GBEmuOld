@@ -1,5 +1,19 @@
 #include "cputest.h"
 #include <QDebug>
+#include <unordered_map>
+
+enum Flag{
+    Z = 0x80,
+    N = 0x40,
+    H = 0x20,
+    C = 0x10
+};
+
+void CPUTest::resetCPU(){
+    cpu.A = cpu.B = cpu.C = cpu.D = cpu.E = cpu.F = cpu.H = cpu.L = cpu.PC = cpu.SP = 0;
+
+}
+
 
 CPUTest::CPUTest()
     :cpu(MMU::UPtr(new FakeMMU))
@@ -13,46 +27,74 @@ void CPUTest::op01(){ //LD BC d16
     cpu.mmu->writeWord(0x300, 1);
     cpu.step();
 
-    QVERIFY(cpu.BC == 0x300);
-    cpu.PC = 0;
+    QVERIFY(cpu.getBC() == 0x300);
+
+    resetCPU();
     
     
 }
 
 void CPUTest::op02(){ //LD (BC) A
     cpu.mmu->writeByte(2, 0);
-    cpu.AF = 0x0300;
-    cpu.BC = 0x10;
+    cpu.A = 3;
+    cpu.C = 0x10;
     cpu.step();
 
     QCOMPARE(int(cpu.mmu->readByte(0x10)), 3);
 
-    cpu.PC = 0;
-    cpu.AF = 0;
-    cpu.BC = 0;
+    resetCPU();
 
 
 }
 
-void CPUTest::op03(){ //INC B
-    cpu.mmu->writeByte(3, 0);
-    cpu.BC = 4;
-    cpu.step();
 
-    QCOMPARE(int(cpu.BC), 5);
+void CPUTest::incN(){ //INC N
+    std::unordered_map<byte*, int> registersToOpcodes = {
+        {&cpu.B, 4}
+    };
 
-    cpu.BC = 0;
-    cpu.PC = 0;
+    for(auto &registerAndOpcode : registersToOpcodes){
+        //test no flags
+        cpu.mmu->writeByte(registerAndOpcode.second, 0);
+        *registerAndOpcode.first = 4;
+        cpu.step();
+
+        QCOMPARE(int(*registerAndOpcode.first), 5);
+        QCOMPARE(int(cpu.F), 0); //flags should be zero
+
+        resetCPU();
+
+        //test zero flag
+        cpu.mmu->writeByte(registerAndOpcode.second, 0);
+        *registerAndOpcode.first = 0xFF;
+        cpu.step();
+
+        QCOMPARE(int(*registerAndOpcode.first), 0);
+        QCOMPARE(int(cpu.F), int(Flag::Z | Flag::H)); //Z and H flag should be set
+
+        resetCPU();
+
+        //test half carry flag
+        cpu.mmu->writeByte(registerAndOpcode.second, 0);
+        *registerAndOpcode.first = 0xF;
+        cpu.step();
+
+        QCOMPARE(int(*registerAndOpcode.first), 0x10);
+        QCOMPARE(int(cpu.F), int(Flag::H)); //H flag should be set
+
+        resetCPU();
+    }
+
+
 
 }
 
-void CPUTest::op04(){ //INC BC
-    cpu.mmu->writeByte(4,0);
-    setHighByte(cpu.BC, 4);
+void CPUTest::incNN(){ //INC BC
+    cpu.mmu->writeByte(3,0);
+    cpu.C = 4;
     cpu.step();
 
-    QCOMPARE(int(highByte(cpu.BC)), 5);
+    QCOMPARE(int(cpu.C), 5);
 
-    cpu.PC = 0;
-    cpu.BC = 0;
+    resetCPU();
 }

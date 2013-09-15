@@ -24,6 +24,11 @@ inline void setHighByte(word &w, byte b){
     w = (b << 8) |(w & 0xFF);
 }
 
+inline void setLowByte(word &w, byte b){
+    w = ((w << 8) &  0xFF00) | b;
+}
+
+
 }
 
 #endif

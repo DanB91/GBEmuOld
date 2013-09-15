@@ -2,6 +2,21 @@
 
 using namespace GBEmu;
 
+enum Flag{
+    Z = 0x80,
+    N = 0x40,
+    H = 0x20,
+    C = 0x10
+};
+
+static inline void setFlag(Flag flag, byte &F){
+    F |= flag;
+}
+
+static inline void clearFlag(Flag flag, byte &F){
+    F &= ~flag;
+}
+
 
 CPU::UPtr CPU::makeCPU()
 {
@@ -12,19 +27,32 @@ CPU::CPU(MMU::UPtr m)
     :mmu(std::move(m)),
       opcodes({{
               Op([](){}, 4, 1), //NOP
+
               Op([&](){ //LD BC, NN
-    BC = mmu->readWord(PC + 1);
+    C = mmu->readByte(PC + 1);
+    B = mmu->readByte(PC + 2);
 
 },
 12, 3),
               Op([&](){ //LD (BC), A
-    mmu->writeByte(highByte(AF), BC);
+    mmu->writeByte(A, getBC());
 },8, 1),
               Op([&](){ // INC BC
+    word BC = getBC();
     BC++;
+    B = highByte(BC);
+    C = lowByte(BC);
 }, 8, 1),
               Op([&](){ //INC B
-    setHighByte(BC, highByte(BC) + 1);
+
+    B++;
+
+    //modify flags
+    if(B == 0) setFlag(Flag::Z, F);
+    clearFlag(Flag::N, F);
+    if((B & 0xF) == 0) setFlag(Flag::H, F);
+
+
 }, 8, 1),
 
 
@@ -33,24 +61,57 @@ CPU::CPU(MMU::UPtr m)
 {}
 
 
-MMU &CPU::getMMU() const noexcept{
+const MMU &CPU::getMMU() const noexcept{
     return *mmu;
 }
 
+byte CPU::getA() const noexcept{
+    return A;
+}
+
+byte CPU::getB() const noexcept{
+    return B;
+}
+
+byte CPU::getC() const noexcept{
+    return C;
+}
+
+byte CPU::getD() const noexcept{
+    return D;
+}
+
+byte CPU::getE() const noexcept{
+    return E;
+}
+
+byte CPU::getF() const noexcept{
+    return F;
+}
+
+byte CPU::getH() const noexcept{
+    return H;
+}
+
+byte CPU::getL() const noexcept{
+    return L;
+}
+
+
 word CPU::getAF() const noexcept{
-    return AF;
+    return (A << 8) | F;
 }
 
 word CPU::getBC() const noexcept{
-    return BC;
+    return (B << 8) | C;
 }
 
 word CPU::getDE() const noexcept{
-    return DE;
+    return (D << 8) | E;
 }
 
 word CPU::getHL() const noexcept{
-    return HL;
+    return (H << 8) | L;
 }
 
 word CPU::getSP() const noexcept{

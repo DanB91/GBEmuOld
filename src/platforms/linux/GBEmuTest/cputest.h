@@ -41,11 +41,13 @@ class CPUTest : public QObject
     private slots:
         void op01();
         void op02();
-        void op03();
-        void op04();
+        void incN();
+        void incNN();
 
     private:
         CPU cpu;
+
+        void resetCPU();
 
 };
 

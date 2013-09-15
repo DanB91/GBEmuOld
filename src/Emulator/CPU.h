@@ -17,13 +17,24 @@ public:
 
     CPU(MMU::UPtr m);
 
-    MMU &getMMU() const noexcept;
+    const MMU &getMMU() const noexcept;
+
+    byte getA() const noexcept;
+    byte getB() const noexcept;
+    byte getC() const noexcept;
+    byte getD() const noexcept;
+    byte getE() const noexcept;
+    byte getF() const noexcept;
+    byte getH() const noexcept;
+    byte getL() const noexcept;
+
     word getAF() const noexcept;
     word getBC() const noexcept;
     word getDE() const noexcept;
     word getHL() const noexcept;
     word getSP() const noexcept;
     word getPC() const noexcept;
+
     int getCyclesSinceLastInstruction() const noexcept;
     int getTotalCycles() const noexcept;
 
@@ -57,8 +68,10 @@ private:
     MMU::UPtr mmu;
     std::array<Op, 256> opcodes;
 
-    //registers
-    word AF, BC, DE, HL, PC, SP;
+    //8-bit registers
+    byte A, B, C, D, E, F, H, L;
+    //16-bit registers
+    word PC, SP;
 
     //clock
     int cyclesSinceLastInstruction = 0, totalCycles = 0;
