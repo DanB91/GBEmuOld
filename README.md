@@ -3,6 +3,8 @@ GBEmu
 
 Game Boy emulator written in C++.  
 
+Required: Linux, Qt, C++11 compiler
+
 So far:
 
 -Graphics have not been worked on yet.  I am currently implementing and testing all opcodes for the CPU.
