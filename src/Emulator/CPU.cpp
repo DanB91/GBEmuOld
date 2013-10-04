@@ -44,7 +44,6 @@ CPU::CPU(MMU::UPtr m)
     C = lowByte(BC);
 }, 8, 1),
               Op([&](){ //INC B
-
     B++;
 
     //modify flags
@@ -53,7 +52,42 @@ CPU::CPU(MMU::UPtr m)
     if((B & 0xF) == 0) setFlag(Flag::H, F);
 
 
-}, 8, 1),
+}, 4, 1),
+              Op([&](){ //DEC B
+
+    B--;
+
+    //modify flags
+    if(B == 0) setFlag(Flag::Z, F);
+    setFlag(Flag::N, F);
+    if((B & 0xF) == 0xF) setFlag(Flag::H, F);
+}, 4, 1),
+
+              Op([&](){ //LD B, d8
+    B = mmu->readByte(PC + 1);
+}, 8, 2),
+
+              Op([&](){ //RLCA
+
+    //set carry flag accordingly
+    if(A & 0x80)
+        setFlag(Flag::C, F);
+    else
+        clearFlag(Flag::C, F);
+
+    A = (A << 1) | ((A >> 7) & 1);
+
+
+
+    //clear rest of flags
+    clearFlag(Flag::N, F);
+    clearFlag(Flag::H, F);
+    clearFlag(Flag::Z, F);
+
+
+
+
+}, 4, 1),
 
 
               }})

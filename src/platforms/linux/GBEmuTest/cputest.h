@@ -43,6 +43,9 @@ class CPUTest : public QObject
         void op02();
         void incN();
         void incNN();
+        void decN();
+        void ldN();
+        void rlca();
 
     private:
         CPU cpu;

@@ -98,3 +98,73 @@ void CPUTest::incNN(){ //INC BC
 
     resetCPU();
 }
+
+void CPUTest::decN()
+{
+    std::unordered_map<byte*, int> registersToOpcodes = {
+        {&cpu.B, 5}
+    };
+
+    for(auto &registerAndOpcode : registersToOpcodes){
+        //test no flags
+        cpu.mmu->writeByte(registerAndOpcode.second, 0);
+        *registerAndOpcode.first = 4;
+        cpu.step();
+
+        QCOMPARE(int(*registerAndOpcode.first), 3);
+        QCOMPARE(int(cpu.F), int(Flag::N)); //N should be set
+
+        resetCPU();
+
+        //test zero flag
+        cpu.mmu->writeByte(registerAndOpcode.second, 0);
+        *registerAndOpcode.first = 1;
+        cpu.step();
+
+        QCOMPARE(int(*registerAndOpcode.first), 0);
+        QCOMPARE(int(cpu.F), int(Flag::Z | Flag::N)); //Z and N flag should be set
+
+        resetCPU();
+
+        //test half carry flag
+        cpu.mmu->writeByte(registerAndOpcode.second, 0);
+        *registerAndOpcode.first = 0x10;
+        cpu.step();
+
+        QCOMPARE(int(*registerAndOpcode.first), 0xF);
+        QCOMPARE(int(cpu.F), int(Flag::H | Flag::N)); //H and N flag should be set
+
+        resetCPU();
+    }
+
+}
+
+void CPUTest::ldN(){
+    std::unordered_map<byte*, int> registersToOpcodes = {
+        {&cpu.B, 6}
+    };
+
+
+    for(auto &registerAndOpcode : registersToOpcodes){
+        cpu.mmu->writeByte(registerAndOpcode.second, 0);
+        cpu.mmu->writeByte(0x45, 1);
+        cpu.step();
+
+        QCOMPARE(int(*registerAndOpcode.first), int(0x45));
+
+        resetCPU();
+    }
+
+}
+
+void CPUTest::rlca()
+{
+    cpu.mmu->writeByte(0x7, 0);
+    cpu.A = 0x85;
+
+    cpu.step();
+
+    QCOMPARE(int(cpu.A), 0xB);
+    QCOMPARE(int(cpu.F), int(Flag::C));
+
+}
