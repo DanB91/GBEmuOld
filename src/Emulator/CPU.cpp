@@ -84,10 +84,13 @@ CPU::CPU(MMU::UPtr m)
     clearFlag(Flag::H, F);
     clearFlag(Flag::Z, F);
 
-
-
-
 }, 4, 1),
+              Op([&](){ //LD (nn), SP
+    mmu->writeWord(SP, mmu->readWord(PC + 1));
+}, 20, 3),
+              Op([&](){
+
+}, 8, 1)
 
 
               }})

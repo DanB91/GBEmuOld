@@ -27,7 +27,7 @@ public:
     }
 
 private:
-    std::array<byte,256> fakeRAM;
+    std::array<byte,0xFFFF> fakeRAM;
 
 };
 
@@ -46,6 +46,7 @@ class CPUTest : public QObject
         void decN();
         void ldN();
         void rlca();
+        void ldNNSP();
 
     private:
         CPU cpu;

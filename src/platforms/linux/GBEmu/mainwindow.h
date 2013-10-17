@@ -2,8 +2,10 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include "cpucontrolwindow.h"
 #include "Emulator/GameBoy.h"
+
+class RenderThread;
+class CPUControlWindow;
 
 namespace Ui {
 class MainWindow;
@@ -27,9 +29,12 @@ private slots:
 
     void on_actionOpen_triggered();
 
+    void on_action_Quit_triggered();
+
 private:
     Ui::MainWindow *ui;
     CPUControlWindow *cpuStatusWindow;
+    RenderThread *rt;
     GBEmu::GameBoy gameBoy;
 };
 

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <array>
+#include <memory>
 #include "types.h"
 #include "Cartridge.h"
 

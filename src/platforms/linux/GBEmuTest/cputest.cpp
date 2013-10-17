@@ -167,4 +167,20 @@ void CPUTest::rlca()
     QCOMPARE(int(cpu.A), 0xB);
     QCOMPARE(int(cpu.F), int(Flag::C));
 
+    resetCPU();
+
+}
+
+void CPUTest::ldNNSP(){
+    cpu.mmu->writeByte(0x8, 0);
+    cpu.mmu->writeWord(0x7844, 1);
+    cpu.SP = 0x4568;
+
+    cpu.step();
+
+    QCOMPARE(int(cpu.mmu->readWord(0x7844)), 0x4568);
+
+    resetCPU();
+
+
 }

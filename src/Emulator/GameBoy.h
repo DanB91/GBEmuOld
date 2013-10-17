@@ -9,6 +9,8 @@ namespace GBEmu{
 class GameBoy{
 
 public:
+    static const int SCREEN_HEIGHT = 144;
+    static const int SCREEN_LENGTH = 160;
 
     GameBoy();
     const CPU &getCPU() const noexcept;
