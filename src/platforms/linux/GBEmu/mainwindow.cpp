@@ -4,7 +4,6 @@
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTimer>
-#include "RenderThread.h"
 #include "cpucontrolwindow.h"
 
 
@@ -14,7 +13,7 @@ static void initScene(QGraphicsScene *scene){
 
     for(int i = 0; i < GBEmu::GameBoy::SCREEN_LENGTH; i++){
         for(int j = 0; j < GBEmu::GameBoy::SCREEN_HEIGHT; j++){
-            scene->addItem(new Pixel(Qt::black, i, j, 2));
+            scene->addItem(new GUIPixel(Qt::black, i, j, 2));
         }
     }
 
