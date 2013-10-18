@@ -4,12 +4,12 @@
 #include <QGraphicsItem>
 #include <QRect>
 
-class Pixel : public QGraphicsItem
+class GUIPixel : public QGraphicsItem
 {
 
 public:
-    Pixel(const QColor &color, int x, int y, int scale, QGraphicsItem *parent = 0);
-    ~Pixel();
+    GUIPixel(const QColor &color, int x, int y, int scale, QGraphicsItem *parent = 0);
+    ~GUIPixel();
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     void setColor(const QColor &c) noexcept;
     void advance(int phase) Q_DECL_OVERRIDE;

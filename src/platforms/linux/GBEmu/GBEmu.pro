@@ -20,7 +20,9 @@ SOURCES += main.cpp\
     ../../../Emulator/Cartridge.cpp \
     cpucontrolwindow.cpp \
     ../../../Emulator/CPUDebugInfo.cpp \
-    Pixel.cpp
+    ../../../Emulator/Screen.cpp \
+    GUIPixel.cpp \
+    ../../../Emulator/GPU.cpp
 
 HEADERS  += mainwindow.h \
     ../../../Emulator/types.h \
@@ -31,12 +33,14 @@ HEADERS  += mainwindow.h \
     ../../../Emulator/Cartridge.h \
     cpucontrolwindow.h \
     ../../../Emulator/CPUDebugInfo.h \
-    Pixel.h
+    ../../../Emulator/Screen.h \
+    GUIPixel.h \
+    ../../../Emulator/GPU.h
 
 FORMS    += mainwindow.ui \
     cpucontrolwindow.ui
 
 INCLUDEPATH += ../../..
 
-QMAKE_CXXFLAGS += -std=c++11 -g
+QMAKE_CXXFLAGS += -std=c++11
 CONFIG += c++11
