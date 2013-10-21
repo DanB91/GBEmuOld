@@ -65,6 +65,13 @@ private:
         int size;  //size of instruction in bytes
     };
 
+    enum class Flag : byte{
+        Z = 0x80,
+        N = 0x40,
+        H = 0x20,
+        C = 0x10
+    };
+
     MMU::UPtr mmu;
     std::array<Op, 256> opcodes;
 
@@ -75,6 +82,20 @@ private:
 
     //clock
     int cyclesSinceLastInstruction = 0, totalCycles = 0;
+
+
+    //private helper methods
+    void setFlag(Flag flag);
+    void clearFlag(Flag flag);
+    void load16BitImmediate(byte &destHigh, byte &destLow);
+    void increment16Bit(byte &high, byte &low);
+    void decrement16Bit(byte &high, byte &low);
+    void increment8Bit(byte &value);
+    void decrement8Bit(byte &value);
+    void rotateLeft(byte &value);
+    void rotateRight(byte &value);
+    void addHL(word addend);
+
 
 };
 

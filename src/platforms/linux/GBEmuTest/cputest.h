@@ -33,25 +33,29 @@ private:
 
 class CPUTest : public QObject
 {
-        Q_OBJECT
+    Q_OBJECT
 
-    public:
-        CPUTest();
+public:
+    CPUTest();
 
-    private slots:
-        void op01();
-        void op02();
-        void incN();
-        void incNN();
-        void decN();
-        void ldN();
-        void rlca();
-        void ldNNSP();
+private slots:
+    void op01();
+    void op02();
+    void incN();
+    void incNN();
+    void decNN();
+    void decN();
+    void ldN();
+    void rlca();
+    void rrca();
+    void ldNNSP();
+    void addHL();
+    void ldNFromMem();
 
-    private:
-        CPU cpu;
+private:
+    CPU cpu;
 
-        void resetCPU();
+    void resetCPU();
 
 };
 

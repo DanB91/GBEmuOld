@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "Pixel.h"
+#include "GUIPixel.h"
 #include <QFileDialog>
 #include <QMessageBox>
 #include <QTimer>

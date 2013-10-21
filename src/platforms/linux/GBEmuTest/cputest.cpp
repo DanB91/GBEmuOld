@@ -2,12 +2,14 @@
 #include <QDebug>
 #include <unordered_map>
 
-enum Flag{
+enum Flag : byte{
     Z = 0x80,
     N = 0x40,
     H = 0x20,
     C = 0x10
 };
+
+#define FLAGSET(flag) QCOMPARE(int(cpu.F), int(flag))
 
 void CPUTest::resetCPU(){
     cpu.A = cpu.B = cpu.C = cpu.D = cpu.E = cpu.F = cpu.H = cpu.L = cpu.PC = cpu.SP = 0;
@@ -50,7 +52,8 @@ void CPUTest::op02(){ //LD (BC) A
 
 void CPUTest::incN(){ //INC N
     std::unordered_map<byte*, int> registersToOpcodes = {
-        {&cpu.B, 4}
+        {&cpu.B, 4},
+        {&cpu.C, 0xC}
     };
 
     for(auto &registerAndOpcode : registersToOpcodes){
@@ -102,7 +105,8 @@ void CPUTest::incNN(){ //INC BC
 void CPUTest::decN()
 {
     std::unordered_map<byte*, int> registersToOpcodes = {
-        {&cpu.B, 5}
+        {&cpu.B, 5},
+        {&cpu.C, 0xD}
     };
 
     for(auto &registerAndOpcode : registersToOpcodes){
@@ -139,9 +143,26 @@ void CPUTest::decN()
 
 }
 
+void CPUTest::decNN(){
+    std::vector<std::tuple<byte&, byte&, int>> testConfigurations {
+                                               std::tuple<byte&, byte&, int>(cpu.B, cpu.C, 0xB)
+};
+    for(auto &tc : testConfigurations){
+        std::get<0>(tc) = 0;
+        std::get<1>(tc) = 0;
+        cpu.mmu->writeByte(std::get<2>(tc), 0);
+        cpu.step();
+
+        QCOMPARE(int(cpu.getBC()), 0xFFFF);
+        resetCPU();
+    }
+
+}
+
 void CPUTest::ldN(){
     std::unordered_map<byte*, int> registersToOpcodes = {
-        {&cpu.B, 6}
+        {&cpu.B, 6},
+        {&cpu.C, 0xE}
     };
 
 
@@ -171,6 +192,21 @@ void CPUTest::rlca()
 
 }
 
+void CPUTest::rrca()
+{
+
+    cpu.mmu->writeByte(0xF, 0);
+    cpu.A = 0x5;
+
+    cpu.step();
+
+    QCOMPARE(int(cpu.A), 0x82);
+    QCOMPARE(int(cpu.F), int(Flag::C));
+
+    resetCPU();
+
+}
+
 void CPUTest::ldNNSP(){
     cpu.mmu->writeByte(0x8, 0);
     cpu.mmu->writeWord(0x7844, 1);
@@ -184,3 +220,54 @@ void CPUTest::ldNNSP(){
 
 
 }
+
+#define testAddHLFlag(hl, nn, flag) \
+    sum = word(hl) + word(nn); \
+    *std::get<0>(registerAndOpcode) = highByte(nn); \
+    *std::get<1>(registerAndOpcode) = lowByte(nn); \
+    cpu.H = highByte(hl); \
+    cpu.L = lowByte(hl); \
+    cpu.step(); \
+    QCOMPARE(int(cpu.H), int(highByte(sum))); \
+    QCOMPARE(int(cpu.L), int(lowByte(sum))); \
+    FLAGSET(flag); \
+    resetCPU()
+
+
+void CPUTest::addHL()
+{
+    std::vector<std::tuple<byte*, byte*, int>> registersToOpcodes {
+                                               std::tuple<byte*, byte*, int>(&cpu.B, &cpu.C, 9)
+};
+
+    for(auto &registerAndOpcode : registersToOpcodes){
+        word sum;
+        cpu.mmu->writeByte(std::get<2>(registerAndOpcode), 0);
+        testAddHLFlag(0x0101, 0x0F02, Flag::H);
+        testAddHLFlag(0x0101, 0xFF02, Flag::H | Flag::C);
+        testAddHLFlag(0x0101, 0xF002, 0);
+        resetCPU();
+
+    }
+}
+
+void CPUTest::ldNFromMem()
+{
+    std::vector<std::tuple<byte*, byte*, int>> testConfigurations {
+                                               std::tuple<byte*, byte*, int>(&cpu.A, &cpu.C, 0xA)
+};
+    for(auto &tc : testConfigurations){
+        *std::get<1>(tc) = 0x45;
+        cpu.mmu->writeByte(std::get<2>(tc), 0); //write opcode
+        cpu.mmu->writeByte(0x55, 0x45); //write 0x55 to address
+        cpu.step();
+
+        QCOMPARE(int(*std::get<0>(tc)), 0x55);
+        resetCPU();
+
+    }
+
+
+}
+
+

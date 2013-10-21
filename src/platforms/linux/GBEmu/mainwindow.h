@@ -4,7 +4,6 @@
 #include <QMainWindow>
 #include "Emulator/GameBoy.h"
 
-class RenderThread;
 class CPUControlWindow;
 
 namespace Ui {
@@ -34,7 +33,6 @@ private slots:
 private:
     Ui::MainWindow *ui;
     CPUControlWindow *cpuStatusWindow;
-    RenderThread *rt;
     GBEmu::GameBoy gameBoy;
 };
 

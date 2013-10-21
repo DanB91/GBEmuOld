@@ -1,21 +1,7 @@
 #include "CPU.h"
+#include "opcodes_inline.h"
 
 using namespace GBEmu;
-
-enum Flag{
-    Z = 0x80,
-    N = 0x40,
-    H = 0x20,
-    C = 0x10
-};
-
-static inline void setFlag(Flag flag, byte &F){
-    F |= flag;
-}
-
-static inline void clearFlag(Flag flag, byte &F){
-    F &= ~flag;
-}
 
 
 CPU::UPtr CPU::makeCPU()
@@ -26,73 +12,54 @@ CPU::UPtr CPU::makeCPU()
 CPU::CPU(MMU::UPtr m)
     :mmu(std::move(m)),
       opcodes({{
-              Op([](){}, 4, 1), //NOP
+              Op([](){}, 4, 1), //0 NOP
 
-              Op([&](){ //LD BC, NN
-    C = mmu->readByte(PC + 1);
-    B = mmu->readByte(PC + 2);
-
+              Op([&](){ //1 LD BC, NN
+    load16BitImmediate(B, C);
 },
 12, 3),
-              Op([&](){ //LD (BC), A
+              Op([&](){ //2 LD (BC), A
     mmu->writeByte(A, getBC());
 },8, 1),
-              Op([&](){ // INC BC
-    word BC = getBC();
-    BC++;
-    B = highByte(BC);
-    C = lowByte(BC);
+              Op([&](){ //3 INC BC
+    increment16Bit(B, C);
 }, 8, 1),
-              Op([&](){ //INC B
-    B++;
-
-    //modify flags
-    if(B == 0) setFlag(Flag::Z, F);
-    clearFlag(Flag::N, F);
-    if((B & 0xF) == 0) setFlag(Flag::H, F);
-
-
+              Op([&](){ //4 INC B
+    increment8Bit(B);
 }, 4, 1),
-              Op([&](){ //DEC B
-
-    B--;
-
-    //modify flags
-    if(B == 0) setFlag(Flag::Z, F);
-    setFlag(Flag::N, F);
-    if((B & 0xF) == 0xF) setFlag(Flag::H, F);
+              Op([&](){ //5 DEC B
+    decrement8Bit(B);
 }, 4, 1),
-
-              Op([&](){ //LD B, d8
+              Op([&](){ //6 LD B, d8
     B = mmu->readByte(PC + 1);
 }, 8, 2),
-
-              Op([&](){ //RLCA
-
-    //set carry flag accordingly
-    if(A & 0x80)
-        setFlag(Flag::C, F);
-    else
-        clearFlag(Flag::C, F);
-
-    A = (A << 1) | ((A >> 7) & 1);
-
-
-
-    //clear rest of flags
-    clearFlag(Flag::N, F);
-    clearFlag(Flag::H, F);
-    clearFlag(Flag::Z, F);
-
+              Op([&](){ //7 RLCA
+    rotateLeft(A);
 }, 4, 1),
-              Op([&](){ //LD (nn), SP
+              Op([&](){ //8 LD (nn), SP
     mmu->writeWord(SP, mmu->readWord(PC + 1));
 }, 20, 3),
-              Op([&](){
-
-}, 8, 1)
-
-
+              Op([&](){ //9 ADD HL, BC
+    addHL(getBC());
+}, 8, 1),
+              Op([&](){ //A LD A, (BC)
+    A = mmu->readByte(getBC());
+}, 8, 1),
+              Op([&](){ //B DEC BC
+    decrement16Bit(B, C);
+}, 8, 1),
+              Op([&](){ //C INC C
+    increment8Bit(C);
+}, 4, 1),
+              Op([&](){ //D INC C
+    decrement8Bit(C);
+}, 4, 1),
+              Op([&](){ //E LD C, d8
+    C = mmu->readByte(PC + 1);
+}, 8, 2),
+              Op([&](){ //F RRCA
+    rotateRight(A);
+}, 4, 1)
               }})
 
 {}

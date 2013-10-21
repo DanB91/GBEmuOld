@@ -34,7 +34,8 @@ HEADERS += \
     ../../../Emulator/CPU.h \
     ../../../Emulator/Cartridge.h \
     MMUTest.h \
-    cputest.h
+    cputest.h \
+    ../../../Emulator/opcodes_inline.h
 
 INCLUDEPATH += ../../../Emulator
 QMAKE_CXXFLAGS += -std=c++11
