@@ -85,6 +85,8 @@ private:
 
 
     //private helper methods
+    void initOpcodes();
+
     void setFlag(Flag flag);
     void clearFlag(Flag flag);
     void load16BitImmediate(byte &destHigh, byte &destLow);

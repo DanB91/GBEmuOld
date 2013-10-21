@@ -62,7 +62,6 @@ inline void CPU::decrement8Bit(byte &value){
 }
 
 
-//rotate
 inline void CPU::rotateLeft(byte &value){
     if(value & 0x80)
         setFlag(Flag::C);
@@ -76,7 +75,7 @@ inline void CPU::rotateLeft(byte &value){
     clearFlag(Flag::Z);
 }
 
-void CPU::rotateRight(byte &value)
+inline void CPU::rotateRight(byte &value)
 {
     if(value & 1){
         setFlag(Flag::C);

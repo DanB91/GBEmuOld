@@ -21,6 +21,7 @@ SOURCES += \
     ../../../Emulator/GameBoy.cpp \
     ../../../Emulator/CPU.cpp \
     ../../../Emulator/Cartridge.cpp \
+    ../../../Emulator/opcodes.cpp \
     cputest.cpp
 DEFINES += SRCDIR=\\\"$$PWD/\\\"
 

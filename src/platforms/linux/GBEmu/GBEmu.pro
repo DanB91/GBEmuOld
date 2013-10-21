@@ -22,7 +22,8 @@ SOURCES += main.cpp\
     ../../../Emulator/CPUDebugInfo.cpp \
     ../../../Emulator/Screen.cpp \
     GUIPixel.cpp \
-    ../../../Emulator/GPU.cpp
+    ../../../Emulator/GPU.cpp \
+    ../../../Emulator/opcodes.cpp \
 
 HEADERS  += mainwindow.h \
     ../../../Emulator/types.h \
