@@ -36,7 +36,8 @@ HEADERS  += mainwindow.h \
     ../../../Emulator/CPUDebugInfo.h \
     ../../../Emulator/Screen.h \
     GUIPixel.h \
-    ../../../Emulator/GPU.h
+    ../../../Emulator/GPU.h \
+    ../../../opcodes_inline.h
 
 FORMS    += mainwindow.ui \
     cpucontrolwindow.ui

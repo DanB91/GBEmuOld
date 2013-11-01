@@ -50,17 +50,20 @@ private:
 
     public:
 
-        Op(std::function<void (void)> op, int cycles, int size);
+        Op(std::function<void ()> op, int cycles, int size);
+        Op(std::function<void ()> op, int cycles, int cyclesWhenActionNotPerformed, int size);
         Op();
 
         void operator()() const; //execute instruction
         int getCycles() const noexcept; //get cycles this instruction takes
         int getSize() const noexcept; //get size of instruction
+        int getCyclesWhenActionNotPerformed() const noexcept;
 
     private:
 
         std::function<void (void)> operation;
         int cycles;
+        int cyclesWhenActionNotPerformed;
         bool isImplemented; //if not implemented, this opcode is not executed
         int size;  //size of instruction in bytes
     };
@@ -83,12 +86,15 @@ private:
     //clock
     int cyclesSinceLastInstruction = 0, totalCycles = 0;
 
+    //used for opcodes that take a certain amount of cycles depending if it perfomred a certain action
+    bool performedAction;
+
 
     //private helper methods
     void initOpcodes();
-
     void setFlag(Flag flag);
     void clearFlag(Flag flag);
+    bool isFlagSet(Flag flag);
     void load16BitImmediate(byte &destHigh, byte &destLow);
     void increment16Bit(byte &high, byte &low);
     void decrement16Bit(byte &high, byte &low);
@@ -96,7 +102,10 @@ private:
     void decrement8Bit(byte &value);
     void rotateLeft(byte &value);
     void rotateRight(byte &value);
+    void rotateLeftThroughCarry(byte &value);
+    void rotateRightThroughCarry(byte &value);
     void addHL(word addend);
+    bool jumpIfClear8Bit(Flag flag, byte value); //returns whether action was performed
 
 
 };

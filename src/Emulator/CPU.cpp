@@ -10,8 +10,7 @@ CPU::UPtr CPU::makeCPU()
 }
 
 CPU::CPU(MMU::UPtr m)
-    :mmu(std::move(m)),
-      opcodes()
+    :mmu(std::move(m)), opcodes(), performedAction(true)
 
 {
     initOpcodes();
@@ -90,17 +89,23 @@ int CPU::getTotalCycles() const noexcept{
 void CPU::step(){
 
     const Op &op =  opcodes[mmu->readByte(PC)];
-
+    int tempPC = PC;
 
     op(); //execute opcode
-    cyclesSinceLastInstruction = op.getCycles(); //how many cycles did this operation take?
-    totalCycles +=  op.getCycles();
 
-    PC += op.getSize(); //go to next instruction
+    int cyclesTaken = (performedAction) ? op.getCycles() : op.getCyclesWhenActionNotPerformed();
+
+    cyclesSinceLastInstruction = cyclesTaken; //how many cycles did this operation take?
+    totalCycles +=  cyclesTaken;
+
+    if(tempPC == PC)  //if PC hasnt changed
+        PC += op.getSize(); //go to next instruction
 
     if(PC == 0x100){
         mmu->leaveBIOS();
     }
+
+    performedAction = true; //since only a few opcodes do not perform their action, the default is true
 }
 
 
@@ -110,9 +115,14 @@ void CPU::loadROM(const std::string &romFileName){
 
 
 //Op implementation
-CPU::Op::Op(std::function<void (void)> op, int cycles, int size)
-    : operation(op), cycles(cycles), isImplemented(true), size(size)
+CPU::Op::Op(std::function<void (void)> op, int cycles, int cyclesWhenActionNotPerformed, int size)
+    : operation(op), cycles(cycles), cyclesWhenActionNotPerformed(cyclesWhenActionNotPerformed), isImplemented(true), size(size)
 {}
+
+CPU::Op::Op(std::function<void (void)> op, int cycles, int size)
+    : Op(op, cycles, -1, size)
+{}
+
 
 CPU::Op::Op()
     :cycles(0), isImplemented(false), size(1)
@@ -130,9 +140,15 @@ int CPU::Op::getCycles() const noexcept{
     return cycles;
 }
 
+int CPU::Op::getCyclesWhenActionNotPerformed() const noexcept{
+    return cyclesWhenActionNotPerformed;
+}
+
 int CPU::Op::getSize() const noexcept{
     return size;
 }
+
+
 
 
 

@@ -39,18 +39,22 @@ public:
     CPUTest();
 
 private slots:
-    void op01();
-    void op02();
+    void ldNND16();
+    void ldNToMemory();
     void incN();
     void incNN();
     void decNN();
     void decN();
     void ldN();
     void rlca();
+    void rla();
     void rrca();
+    void rra();
     void ldNNSP();
     void addHL();
     void ldNFromMem();
+    void jrr8();
+    void jumpIfFlagIsClearR8();
 
 private:
     CPU cpu;

@@ -33,7 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     initScene(scene);
     ui->graphicsView->setScene(scene);
-    timer->start(50);
+    timer->start(150);
 }
 
 

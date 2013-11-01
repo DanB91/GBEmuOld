@@ -12,6 +12,10 @@ inline void CPU::clearFlag(Flag flag){
     F &= ~static_cast<byte>(flag);
 }
 
+inline bool CPU::isFlagSet(Flag flag){
+    return (F & static_cast<byte>(flag)) != 0;
+}
+
 
 //loads 16 bit immediate
 inline void  CPU::load16BitImmediate(byte &destHigh, byte &destLow){
@@ -90,6 +94,39 @@ inline void CPU::rotateRight(byte &value)
     clearFlag(Flag::Z);
 }
 
+void CPU::rotateLeftThroughCarry(byte &value)
+{
+    byte temp = (value << 1) | ((F & static_cast<byte>(Flag::C)) ? 1 : 0);
+
+    if(value & 0x80)
+        setFlag(Flag::C);
+    else
+        clearFlag(Flag::C);
+
+    value = temp;
+
+    clearFlag(Flag::N);
+    clearFlag(Flag::H);
+    clearFlag(Flag::Z);
+
+}
+
+void CPU::rotateRightThroughCarry(byte &value)
+{
+    byte temp = ((F & static_cast<byte>(Flag::C)) ? 0x80 : 0) | (value >> 1) ;
+
+    if(value & 0x1)
+        setFlag(Flag::C);
+    else
+        clearFlag(Flag::C);
+
+    value = temp;
+
+    clearFlag(Flag::N);
+    clearFlag(Flag::H);
+    clearFlag(Flag::Z);
+}
+
 inline void CPU::addHL(word addend){
     int result = getHL() + addend;
 
@@ -109,6 +146,18 @@ inline void CPU::addHL(word addend){
     L = lowByte(result);
 
 }
+
+bool CPU::jumpIfClear8Bit(Flag flag, byte value){
+    if(!isFlagSet(flag)){
+        PC += value;
+        return true;
+    }
+
+    return false;
+}
+
+
+
 
 
 #endif // OPCODES_INLINE_H
