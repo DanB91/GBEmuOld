@@ -147,13 +147,13 @@ inline void CPU::addHL(word addend){
 
 }
 
-bool CPU::jumpIfClear8Bit(Flag flag, byte value){
+void CPU::jumpIfClear8Bit(Flag flag, byte value){
     if(!isFlagSet(flag)){
         PC += value;
-        return true;
+        performedAction = changedPC = true;
+    } else{
+        performedAction = changedPC = false;
     }
-
-    return false;
 }
 
 

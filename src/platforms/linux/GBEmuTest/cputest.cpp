@@ -31,7 +31,8 @@ void CPUTest::ldNND16(){
 
     std::vector<std::tuple<byte&, byte&, int>> testConfigurations {
                                                std::tuple<byte&, byte&, int>(cpu.B, cpu.C, 0x1),
-                                               std::tuple<byte&, byte&, int>(cpu.D, cpu.E, 0x11)
+                                               std::tuple<byte&, byte&, int>(cpu.D, cpu.E, 0x11),
+                                               std::tuple<byte&, byte&, int>(cpu.H, cpu.L, 0x21)
 };
     for(auto &tc : testConfigurations){
         cpu.mmu->writeByte(std::get<2>(tc), 0);
@@ -50,18 +51,27 @@ void CPUTest::ldNND16(){
 
 void CPUTest::ldNToMemory(){ //LD (BC) A
 
-    std::vector<std::tuple<byte&, byte&, int>> testConfigurations {
-                                               std::tuple<byte&, byte&, int>(cpu.C, cpu.A, 0x2),
-                                               std::tuple<byte&, byte&, int>(cpu.E, cpu.A, 0x12)
+    std::vector<std::tuple<byte&, byte&, QString, int>> testConfigurations {// bool tests if HL should be
+                                                     std::tuple<byte&, byte&, QString, int>(cpu.C, cpu.A, tr("nothing"), 0x2),
+                                                     std::tuple<byte&, byte&, QString, int>(cpu.E, cpu.A, tr("nothing"), 0x12),
+                                                     std::tuple<byte&, byte&, QString, int>(cpu.L, cpu.A, tr("increment"), 0x22)
+
+
 };
     for(auto &tc : testConfigurations){
-        cpu.mmu->writeByte(std::get<2>(tc), 0);
+        cpu.mmu->writeByte(std::get<3>(tc), 0);
         std::get<1>(tc) = 3;
         std::get<0>(tc) = 0x10;
         cpu.step();
 
         QCOMPARE(int(cpu.mmu->readByte(0x10)), 3);
         QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+
+        if(std::get<2>(tc) == tr("decrement")){
+            QCOMPARE(int(std::get<0>(tc)), 0xF);
+        } else if(std::get<2>(tc) == tr("increment")){
+            QCOMPARE(int(std::get<0>(tc)), 0x11);
+        }
 
 
 
@@ -74,7 +84,8 @@ void CPUTest::ldNToMemory(){ //LD (BC) A
 void CPUTest::incNN(){ //INC BC
     std::vector<std::tuple<byte&, byte&, int>> testConfigurations {
                                                std::tuple<byte&, byte&, int>(cpu.B, cpu.C, 0x3),
-                                               std::tuple<byte&, byte&, int>(cpu.D, cpu.E, 0x13)
+                                               std::tuple<byte&, byte&, int>(cpu.D, cpu.E, 0x13),
+                                               std::tuple<byte&, byte&, int>(cpu.H, cpu.L, 0x23)
 };
     for(auto &tc : testConfigurations){
         cpu.mmu->writeByte(std::get<2>(tc), 0);
@@ -99,7 +110,9 @@ void CPUTest::incN(){ //INC N
             {&cpu.B, 4},
             {&cpu.C, 0xC},
             {&cpu.D, 0x14},
-            {&cpu.E, 0x1C}
+            {&cpu.E, 0x1C},
+        {&cpu.H, 0x24},
+
     };
 
     for(auto &registerAndOpcode : registersToOpcodes){
@@ -150,6 +163,7 @@ void CPUTest::decN()
         {&cpu.C, 0xD},
         {&cpu.D, 0x15},
         {&cpu.E, 0x1D},
+        {&cpu.H, 0x25}
     };
 
     for(auto &registerAndOpcode : registersToOpcodes){
@@ -215,7 +229,8 @@ void CPUTest::ldN(){
                                                std::tuple<byte*, int>(&cpu.B, 6),
                                                std::tuple<byte*, int>(&cpu.C, 0xE),
                                                std::tuple<byte*, int>(&cpu.D, 0x16),
-                                               std::tuple<byte*, int>(&cpu.E, 0x1E)
+                                               std::tuple<byte*, int>(&cpu.E, 0x1E),
+                                               std::tuple<byte*, int>(&cpu.H, 0x26),
 };
 
 

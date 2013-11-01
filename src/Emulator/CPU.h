@@ -88,6 +88,7 @@ private:
 
     //used for opcodes that take a certain amount of cycles depending if it perfomred a certain action
     bool performedAction;
+    bool changedPC;
 
 
     //private helper methods
@@ -105,7 +106,7 @@ private:
     void rotateLeftThroughCarry(byte &value);
     void rotateRightThroughCarry(byte &value);
     void addHL(word addend);
-    bool jumpIfClear8Bit(Flag flag, byte value); //returns whether action was performed
+    void jumpIfClear8Bit(Flag flag, byte value);
 
 
 };

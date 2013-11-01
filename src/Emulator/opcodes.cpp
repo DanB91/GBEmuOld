@@ -56,8 +56,7 @@ void CPU::initOpcodes(){
                    }, 4, 2),
                    Op([&](){ //11 LD BC, NN
                              load16BitImmediate(D, E);
-                   },
-                   12, 3),
+                   },12, 3),
                    Op([&](){ //12 LD (DE), A
                              mmu->writeByte(A, getDE());
                    },8, 1),
@@ -78,6 +77,7 @@ void CPU::initOpcodes(){
                    }, 4, 1),
                    Op([&](){ //18 JR r8
                              PC += mmu->readByte(PC + 1);
+                             changedPC = true;
                    }, 12, 2),
                    Op([&](){ //19 ADD HL, DE
                              addHL(getDE());
@@ -101,7 +101,29 @@ void CPU::initOpcodes(){
                              rotateRightThroughCarry(A);
                    }, 4, 1),
                    Op([&](){ //20 JR NZ, r8
-                             performedAction = jumpIfClear8Bit(Flag::Z, mmu->readByte(PC + 1));
-                   }, 12, 8, 2)
+                             jumpIfClear8Bit(Flag::Z, mmu->readByte(PC + 1));
+                   }, 12, 8, 2),
+                   Op([&](){ //21 LD HL, NN
+                             load16BitImmediate(H, L);
+                   },12, 3),
+
+                   Op([&](){ //22 LD (HL+), A
+                             mmu->writeByte(A, getHL());
+                             increment16Bit(H, L); //increment HL
+
+                   },8, 1),
+                   Op([&](){ //23 INC HL
+                             increment16Bit(H, L);
+                   }, 8, 1),
+                   Op([&](){ //24 INC H
+                             increment8Bit(H);
+                   }, 4, 1),
+                   Op([&](){ //25 DEC H
+                             decrement8Bit(H);
+                   }, 4, 1),
+                   Op([&](){ //26 LD H, d8
+                             H = mmu->readByte(PC + 1);
+                   }, 8, 2),
+
                }};
 }

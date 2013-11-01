@@ -89,7 +89,8 @@ int CPU::getTotalCycles() const noexcept{
 void CPU::step(){
 
     const Op &op =  opcodes[mmu->readByte(PC)];
-    int tempPC = PC;
+
+    changedPC = false;
 
     op(); //execute opcode
 
@@ -98,7 +99,7 @@ void CPU::step(){
     cyclesSinceLastInstruction = cyclesTaken; //how many cycles did this operation take?
     totalCycles +=  cyclesTaken;
 
-    if(tempPC == PC)  //if PC hasnt changed
+    if(!changedPC)  //if PC hasnt changed
         PC += op.getSize(); //go to next instruction
 
     if(PC == 0x100){
