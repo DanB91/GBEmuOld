@@ -107,6 +107,7 @@ private:
     void rotateRightThroughCarry(byte &value);
     void addHL(word addend);
     void jumpIfClear8Bit(Flag flag, byte value);
+    void decimalAdjust(byte &value);
 
 
 };

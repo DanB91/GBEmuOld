@@ -147,12 +147,32 @@ inline void CPU::addHL(word addend){
 
 }
 
-void CPU::jumpIfClear8Bit(Flag flag, byte value){
+inline void CPU::jumpIfClear8Bit(Flag flag, byte value){
     if(!isFlagSet(flag)){
         PC += value;
         performedAction = changedPC = true;
     } else{
         performedAction = changedPC = false;
+    }
+}
+
+inline void CPU::decimalAdjust(byte &value)
+{
+    if(isFlagSet(Flag::H) || (value & 0xF) > 9){ //adjust low nibble
+        value += 0x6;
+    }
+
+    if(isFlagSet((Flag::C)) || (value & 0xF0) > 0x90){ //adjust high nibble
+        value += 0x60;
+        setFlag(Flag::C);
+    }
+
+    clearFlag(Flag::H);
+
+    if(value == 0){
+        setFlag(Flag::Z);
+    } else{
+        clearFlag(Flag::Z);
     }
 }
 
