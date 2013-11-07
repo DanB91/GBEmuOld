@@ -396,7 +396,7 @@ void CPUTest::jrr8()
         cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
         cpu.step();
 
-        QCOMPARE(int(cpu.PC), 0x55);
+        QCOMPARE(int(cpu.PC), 0x57);
         QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
 
 
@@ -416,7 +416,7 @@ void CPUTest::jumpIfFlagIsClearR8()
         cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
         cpu.step();
 
-        QCOMPARE(int(cpu.PC), 0x55);
+        QCOMPARE(int(cpu.PC), 0x57);
         QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
         resetCPU();
 
@@ -428,10 +428,48 @@ void CPUTest::jumpIfFlagIsClearR8()
 
         QCOMPARE(int(cpu.PC), 0x2);
         QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+        resetCPU();
 
 
 
     }
 }
+
+void CPUTest::decimalAdjustA(){
+    //will write the test case soon....
+}
+
+void CPUTest::jumpIfFlagIsSetR8(){
+
+std::vector<std::tuple<Flag, int>> testConfigurations {
+                                   std::tuple<Flag, int>(Flag::Z, 0x28)
+};
+for(auto &tc : testConfigurations){
+    cpu.mmu->writeByte(std::get<1>(tc), 0); //write opcode
+    cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
+    cpu.F = static_cast<byte>(std::get<0>(tc));
+    cpu.step();
+
+    QCOMPARE(int(cpu.PC), 0x57);
+    QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
+    resetCPU();
+
+    //test when flag is not set
+    cpu.mmu->writeByte(std::get<1>(tc), 0); //write opcode
+    cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
+
+    cpu.step();
+
+    QCOMPARE(int(cpu.PC), 0x2);
+    QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+    resetCPU();
+
+
+
+}
+
+}
+
+
 
 

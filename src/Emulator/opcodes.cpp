@@ -76,8 +76,7 @@ void CPU::initOpcodes(){
                              rotateLeftThroughCarry(A);
                    }, 4, 1),
                    Op([&](){ //18 JR r8
-                             PC += mmu->readByte(PC + 1);
-                             changedPC = true;
+                             PC += static_cast<int8_t>(mmu->readByte(PC + 1));
                    }, 12, 2),
                    Op([&](){ //19 ADD HL, DE
                              addHL(getDE());
@@ -124,6 +123,12 @@ void CPU::initOpcodes(){
                    Op([&](){ //26 LD H, d8
                              H = mmu->readByte(PC + 1);
                    }, 8, 2),
+                   Op([&](){ //27 DAA
+                             decimalAdjust(A);
+                   }, 4, 1),
+                   Op([&](){ //28 JR Z, r8
+                             jumpIfSet8Bit(Flag::Z, mmu->readByte(PC + 1));
+                   }, 12, 8, 2),
 
                }};
 }

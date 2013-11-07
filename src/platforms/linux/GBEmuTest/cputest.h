@@ -55,7 +55,8 @@ private slots:
     void ldNFromMem();
     void jrr8();
     void jumpIfFlagIsClearR8();
-
+    void decimalAdjustA();
+    void jumpIfFlagIsSetR8();
 private:
     CPU cpu;
 

@@ -149,33 +149,60 @@ inline void CPU::addHL(word addend){
 
 inline void CPU::jumpIfClear8Bit(Flag flag, byte value){
     if(!isFlagSet(flag)){
-        PC += value;
-        performedAction = changedPC = true;
+        PC += static_cast<int8_t>(value);
+        performedAction = true;
     } else{
-        performedAction = changedPC = false;
+        performedAction = false;
     }
 }
 
 inline void CPU::decimalAdjust(byte &value)
 {
-    if(isFlagSet(Flag::H) || (value & 0xF) > 9){ //adjust low nibble
-        value += 0x6;
+    unsigned result = static_cast<unsigned>(value);
+    
+    if(!isFlagSet(Flag::N)){ //if addition was used
+        if(isFlagSet(Flag::H) || (result & 0xF) > 9){ //adjust low nibble
+            result += 0x6;
+        }
+
+        if(isFlagSet((Flag::C)) || (result & 0xF0) > 0x90){ //adjust high nibble
+            result += 0x60;
+        }
+
+    } else{ //subtraction used
+       if(isFlagSet(Flag::H)){
+           result = (result - 6) & 0xFF;
+       }
+
+       if(isFlagSet(Flag::C)){
+           result -= 0x60;
+       }
+
     }
 
-    if(isFlagSet((Flag::C)) || (value & 0xF0) > 0x90){ //adjust high nibble
-        value += 0x60;
+    if(result & 0x100){
         setFlag(Flag::C);
     }
 
     clearFlag(Flag::H);
 
-    if(value == 0){
+    if((result & 0xFF) == 0){
         setFlag(Flag::Z);
     } else{
         clearFlag(Flag::Z);
     }
+
+    value = result;
 }
 
+inline void CPU::jumpIfSet8Bit(Flag flag, byte value){
+    if(isFlagSet(flag)){
+        PC += static_cast<int8_t>(value);
+        performedAction =  true;
+    } else{
+        performedAction = false;
+    }
+}
 
 
 

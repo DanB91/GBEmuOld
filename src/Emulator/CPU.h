@@ -88,7 +88,6 @@ private:
 
     //used for opcodes that take a certain amount of cycles depending if it perfomred a certain action
     bool performedAction;
-    bool changedPC;
 
 
     //private helper methods
@@ -108,7 +107,7 @@ private:
     void addHL(word addend);
     void jumpIfClear8Bit(Flag flag, byte value);
     void decimalAdjust(byte &value);
-
+    void jumpIfSet8Bit(Flag flag, byte value);
 
 };
 

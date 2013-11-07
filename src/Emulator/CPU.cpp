@@ -90,8 +90,6 @@ void CPU::step(){
 
     const Op &op =  opcodes[mmu->readByte(PC)];
 
-    changedPC = false;
-
     op(); //execute opcode
 
     int cyclesTaken = (performedAction) ? op.getCycles() : op.getCyclesWhenActionNotPerformed();
@@ -99,8 +97,8 @@ void CPU::step(){
     cyclesSinceLastInstruction = cyclesTaken; //how many cycles did this operation take?
     totalCycles +=  cyclesTaken;
 
-    if(!changedPC)  //if PC hasnt changed
-        PC += op.getSize(); //go to next instruction
+
+    PC += op.getSize(); //go to next instruction
 
     if(PC == 0x100){
         mmu->leaveBIOS();
