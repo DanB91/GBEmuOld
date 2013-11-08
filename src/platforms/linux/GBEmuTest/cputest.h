@@ -52,11 +52,14 @@ private slots:
     void rra();
     void ldNNSP();
     void addHL();
+    void addHLHL();
     void ldNFromMem();
     void jrr8();
     void jumpIfFlagIsClearR8();
     void decimalAdjustA();
     void jumpIfFlagIsSetR8();
+    void complementA();
+
 private:
     CPU cpu;
 

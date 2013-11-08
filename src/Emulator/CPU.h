@@ -108,6 +108,7 @@ private:
     void jumpIfClear8Bit(Flag flag, byte value);
     void decimalAdjust(byte &value);
     void jumpIfSet8Bit(Flag flag, byte value);
+    void complement(byte &value);
 
 };
 

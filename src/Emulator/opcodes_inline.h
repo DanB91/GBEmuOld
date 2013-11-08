@@ -204,6 +204,14 @@ inline void CPU::jumpIfSet8Bit(Flag flag, byte value){
     }
 }
 
+inline void CPU::complement(byte &value){
+
+    value = ~value;
+    setFlag(Flag::N);
+    setFlag(Flag::H);
+
+}
+
 
 
 

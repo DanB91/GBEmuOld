@@ -90,7 +90,7 @@ void CPU::initOpcodes(){
                    Op([&](){ //1C INC E
                              increment8Bit(E);
                    }, 4, 1),
-                   Op([&](){ //1D INC E
+                   Op([&](){ //1D DEC E
                              decrement8Bit(E);
                    }, 4, 1),
                    Op([&](){ //1E LD E, d8
@@ -129,6 +129,28 @@ void CPU::initOpcodes(){
                    Op([&](){ //28 JR Z, r8
                              jumpIfSet8Bit(Flag::Z, mmu->readByte(PC + 1));
                    }, 12, 8, 2),
+                   Op([&](){ //29 ADD HL, HL
+                             addHL(getHL());
+                   }, 8, 1),
+                   Op([&](){ //2A LD A, (HL+)
+                             A = mmu->readByte(getHL());
+                             increment16Bit(H, L); //increment HL
+                   },8, 1),
+                   Op([&](){ //2B DEC HL
+                             decrement16Bit(H, L);
+                   }, 8, 1),
+                   Op([&](){ //2C INC L
+                             increment8Bit(L);
+                   }, 4, 1),
+                   Op([&](){ //2D DEC L
+                             decrement8Bit(L);
+                   }, 4, 1),
+                   Op([&](){ //2E LD L, d8
+                             L = mmu->readByte(PC + 1);
+                   }, 8, 2),
+                   Op([&](){ //2F CPL
+                             complement(A);
+                   }, 4, 1),
 
                }};
 }
