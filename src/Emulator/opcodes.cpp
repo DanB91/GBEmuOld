@@ -152,5 +152,36 @@ void CPU::initOpcodes(){
                              complement(A);
                    }, 4, 1),
 
+
+                   Op([&](){ //30 JR NC, r8
+                             jumpIfClear8Bit(Flag::C, mmu->readByte(PC + 1));
+                   }, 12, 8, 2),
+                   Op([&](){ //31 LD SP, NN
+                             SP = mmu->readWord(PC + 1);
+                   },12, 3),
+
+                   Op([&](){ //32 LD (HL-), A
+                             mmu->writeByte(A, getHL());
+                             decrement16Bit(H, L); //decrement HL
+
+                   },8, 1),
+                   Op([&](){ //33 INC SP
+                             SP++;
+                   }, 8, 1),
+                   Op([&](){ //34 INC (HL)
+                             byte b = mmu->readByte(getHL());
+                             increment8Bit(b);
+                             mmu->writeByte(b, getHL());
+                   }, 12, 1),
+                   Op([&](){ //35 DEC (HL)
+                             byte b = mmu->readByte(getHL());
+                             decrement8Bit(b);
+                             mmu->writeByte(b, getHL());
+                   }, 12, 1),
+                   Op([&](){ //36 LD (HL), d8
+                             mmu->writeByte(mmu->readByte(PC + 1), getHL());
+
+                   }, 12, 2),
+
                }};
 }

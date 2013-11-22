@@ -31,6 +31,7 @@ inline void CPU::increment16Bit(byte &high, byte &low){
     low = lowByte(w);
 }
 
+
 //decrement 16 bit values
 inline void CPU::decrement16Bit(byte &high, byte &low){
     word w = wordFromBytes(high, low);

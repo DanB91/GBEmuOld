@@ -42,6 +42,8 @@ void CPUTest::ldNND16(){
         QCOMPARE(int(std::get<0>(tc)), 0x3);
         QCOMPARE(int(std::get<1>(tc)), 0);
         QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
+        QCOMPARE(int(cpu.PC), 3);
+
 
         resetCPU();
     }
@@ -54,7 +56,8 @@ void CPUTest::ldNToMemory(){ //LD (BC) A
     std::vector<std::tuple<byte&, byte&, QString, int>> testConfigurations {// bool tests if HL should be
                                                      std::tuple<byte&, byte&, QString, int>(cpu.C, cpu.A, tr("nothing"), 0x2),
                                                      std::tuple<byte&, byte&, QString, int>(cpu.E, cpu.A, tr("nothing"), 0x12),
-                                                     std::tuple<byte&, byte&, QString, int>(cpu.L, cpu.A, tr("increment"), 0x22)
+                                                     std::tuple<byte&, byte&, QString, int>(cpu.L, cpu.A, tr("increment"), 0x22),
+                                                     std::tuple<byte&, byte&, QString, int>(cpu.L, cpu.A, tr("decrement"), 0x32)
 
 
 };
@@ -82,6 +85,9 @@ void CPUTest::ldNToMemory(){ //LD (BC) A
 }
 
 void CPUTest::incNN(){ //INC BC
+
+
+
     std::vector<std::tuple<byte&, byte&, int>> testConfigurations {
                                                std::tuple<byte&, byte&, int>(cpu.B, cpu.C, 0x3),
                                                std::tuple<byte&, byte&, int>(cpu.D, cpu.E, 0x13),
@@ -101,6 +107,19 @@ void CPUTest::incNN(){ //INC BC
 
         resetCPU();
     }
+
+}
+
+void CPUTest::incSP()
+{
+    cpu.mmu->writeByte(0x33, 0);
+    cpu.SP = 0xAAFF;
+    cpu.step();
+
+    QCOMPARE(int(cpu.SP), 0xAB00);
+    QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+    QCOMPARE(int(cpu.PC), 1);
+    resetCPU();
 
 }
 
@@ -151,6 +170,45 @@ void CPUTest::incN(){ //INC N
         resetCPU();
     }
 
+
+
+}
+
+void CPUTest::incValAtHL()
+{
+    cpu.L = 3;
+    cpu.mmu->writeByte(0x34, 0);
+    cpu.mmu->writeByte(4, 3);
+    cpu.step();
+
+    QCOMPARE(int(cpu.mmu->readByte(3)), 5);
+    QCOMPARE(int(cpu.F), 0); //flags should be zero
+    resetCPU();
+
+    //test zero flag
+    cpu.L = 3;
+    cpu.mmu->writeByte(0x34, 0);
+    cpu.mmu->writeByte(0xFF, 3);
+    cpu.step();
+
+    QCOMPARE(int(cpu.mmu->readByte(3)), 0);
+    QCOMPARE(int(cpu.F), int(Flag::Z | Flag::H)); //Z and H flag should be set
+
+    resetCPU();
+
+    //test half carry flag
+    cpu.L = 3;
+    cpu.mmu->writeByte(0x34, 0);
+    cpu.mmu->writeByte(0xF, 3);
+    cpu.step();
+
+    QCOMPARE(int(cpu.mmu->readByte(3)), 0x10);
+    QCOMPARE(int(cpu.F), int(Flag::H)); //H flag should be set
+
+    QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
+
+
+    resetCPU();
 
 
 }
@@ -226,6 +284,43 @@ void CPUTest::decNN(){
 
 }
 
+void CPUTest::decValAtHL()
+{
+    cpu.L = 3;
+    cpu.mmu->writeByte(0x35, 0);
+    cpu.mmu->writeByte(4, 3);
+    cpu.step();
+
+    QCOMPARE(int(cpu.mmu->readByte(3)), 3);
+    QCOMPARE(int(cpu.F), int(Flag::N)); //N should be set
+    resetCPU();
+
+    //test zero flag
+    cpu.L = 3;
+    cpu.mmu->writeByte(0x35, 0);
+    cpu.mmu->writeByte(0x1, 3);
+    cpu.step();
+
+    QCOMPARE(int(cpu.mmu->readByte(3)), 0);
+    QCOMPARE(int(cpu.F), int(Flag::Z | Flag::N)); //Z and N flag should be set
+
+    resetCPU();
+
+    //test half carry flag
+    cpu.L = 3;
+    cpu.mmu->writeByte(0x35, 0);
+    cpu.mmu->writeByte(0x10, 3);
+    cpu.step();
+
+    QCOMPARE(int(cpu.mmu->readByte(3)), 0xF);
+    QCOMPARE(int(cpu.F), int(Flag::H | Flag::N)); //H and N flag should be set
+
+    QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
+
+
+    resetCPU();
+}
+
 void CPUTest::ldN(){
 
     std::vector<std::tuple<byte*, int>> registersToOpcodes {
@@ -249,6 +344,20 @@ void CPUTest::ldN(){
 
         resetCPU();
     }
+
+}
+
+void CPUTest::ldValAtHL()
+{
+    cpu.L = 3;
+    cpu.mmu->writeWord(0x4536, 0);
+    cpu.step();
+
+    QCOMPARE(int(cpu.mmu->readByte(3)), 0x45);
+    QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
+    QCOMPARE(int(cpu.PC), 2);
+    resetCPU();
+
 
 }
 
@@ -444,7 +553,8 @@ void CPUTest::jrr8()
 void CPUTest::jumpIfFlagIsClearR8()
 {
     std::vector<std::tuple<Flag, int>> testConfigurations {
-                                       std::tuple<Flag, int>(Flag::Z, 0x20)
+                                       std::tuple<Flag, int>(Flag::Z, 0x20),
+                                       std::tuple<Flag, int>(Flag::C, 0x30)
 };
     for(auto &tc : testConfigurations){
         cpu.mmu->writeByte(std::get<1>(tc), 0); //write opcode
@@ -527,6 +637,20 @@ void CPUTest::complementA()
 
     QCOMPARE(int(cpu.A), 255);
     FLAGSET(Flag::H | Flag::N);
+    resetCPU();
+
+}
+
+void CPUTest::loadSP()
+{
+    cpu.mmu->writeByte(0x31, 0);
+    cpu.mmu->writeWord(0x3000, 1);
+    cpu.step();
+
+    QCOMPARE(int(cpu.SP), 0x3000);
+    QCOMPARE(int(cpu.cyclesSinceLastInstruction), 12);
+    QCOMPARE(int(cpu.PC), 3);
+
 
 }
 

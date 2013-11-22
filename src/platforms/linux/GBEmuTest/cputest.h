@@ -42,10 +42,14 @@ private slots:
     void ldNND16();
     void ldNToMemory();
     void incN();
+    void incValAtHL();
     void incNN();
+    void incSP();
     void decNN();
+    void decValAtHL();
     void decN();
     void ldN();
+    void ldValAtHL();
     void rlca();
     void rla();
     void rrca();
@@ -59,6 +63,7 @@ private slots:
     void decimalAdjustA();
     void jumpIfFlagIsSetR8();
     void complementA();
+    void loadSP();
 
 private:
     CPU cpu;
