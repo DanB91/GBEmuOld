@@ -178,10 +178,60 @@ void CPU::initOpcodes(){
                              decrement8Bit(b);
                              mmu->writeByte(b, getHL());
                    }, 12, 1),
+
                    Op([&](){ //36 LD (HL), d8
                              mmu->writeByte(mmu->readByte(PC + 1), getHL());
 
                    }, 12, 2),
+
+                   Op([&](){ //37 SCF
+                             setFlag(Flag::C);
+                             clearFlag(Flag::N);
+                             clearFlag(Flag::H);
+
+                   }, 4, 1),
+
+                   Op([&](){ //38 JR C, r8
+                             jumpIfSet8Bit(Flag::C, mmu->readByte(PC + 1));
+                   }, 12, 8, 2),
+
+                   Op([&](){ //39 ADD HL, SP
+                             addHL(SP); //need to add test
+                   }, 8, 1),
+
+                   Op([&](){ //3A LD A, (HL-)
+                             A = mmu->readByte(getHL());
+                             decrement16Bit(H, L); //decrement HL
+                   },8, 1),
+
+                   Op([&](){ //3B DEC SP
+                             SP--;
+                   }, 8, 1),
+
+                   Op([&](){ //3C INC A
+                             increment8Bit(A);
+                   }, 4, 1),
+
+                   Op([&](){ //3D DEC A
+                             decrement8Bit(A);
+                   }, 4, 1),
+
+                   Op([&](){ //3E LD A, d8
+                             A = mmu->readByte(PC + 1);
+                   }, 8, 2),
+
+                   Op([&](){ //3F CCF
+                             if(isFlagSet(Flag::C)){
+                                 clearFlag(Flag::C);
+                             }
+                             else{
+                                 setFlag(Flag::C);
+                             }
+
+                             clearFlag(Flag::N);
+                             clearFlag(Flag::H);
+
+                   }, 4, 1),
 
                }};
 }

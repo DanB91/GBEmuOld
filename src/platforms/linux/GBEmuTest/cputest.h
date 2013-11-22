@@ -64,6 +64,8 @@ private slots:
     void jumpIfFlagIsSetR8();
     void complementA();
     void loadSP();
+    void setCarry();
+    void invertCarry();
 
 private:
     CPU cpu;

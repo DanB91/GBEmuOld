@@ -132,6 +132,7 @@ void CPUTest::incN(){ //INC N
             {&cpu.E, 0x1C},
         {&cpu.H, 0x24},
         {&cpu.L, 0x2C},
+        {&cpu.A, 0x3C},
 
     };
 
@@ -224,6 +225,7 @@ void CPUTest::decN()
         {&cpu.E, 0x1D},
         {&cpu.H, 0x25},
         {&cpu.L, 0x2D},
+        {&cpu.A, 0x3D}
     };
 
     for(auto &registerAndOpcode : registersToOpcodes){
@@ -330,6 +332,7 @@ void CPUTest::ldN(){
                                         std::tuple<byte*, int>(&cpu.E, 0x1E),
                                         std::tuple<byte*, int>(&cpu.H, 0x26),
                                         std::tuple<byte*, int>(&cpu.L, 0x2E),
+                                        std::tuple<byte*, int>(&cpu.A, 0x3E),
 };
 
 
@@ -499,7 +502,8 @@ void CPUTest::ldNFromMem()
     std::vector<std::tuple<byte*, byte*, QString, int>> testConfigurations {
                                                std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.C, tr(""),0xA),
                                                std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.E, tr(""), 0x1A),
-                                               std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.L, tr("increment"), 0x2A)
+                                               std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.L, tr("increment"), 0x2A),
+                                                        std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.L, tr("decrement"), 0x3A)
 };
     for(auto &tc : testConfigurations){
         *std::get<1>(tc) = 0x45;
@@ -594,7 +598,8 @@ void CPUTest::decimalAdjustA(){
 void CPUTest::jumpIfFlagIsSetR8(){
 
 std::vector<std::tuple<Flag, int>> testConfigurations {
-                                   std::tuple<Flag, int>(Flag::Z, 0x28)
+                                   std::tuple<Flag, int>(Flag::Z, 0x28),
+                                   std::tuple<Flag, int>(Flag::C, 0x38)
 };
 for(auto &tc : testConfigurations){
     cpu.mmu->writeByte(std::get<1>(tc), 0); //write opcode
@@ -650,8 +655,43 @@ void CPUTest::loadSP()
     QCOMPARE(int(cpu.SP), 0x3000);
     QCOMPARE(int(cpu.cyclesSinceLastInstruction), 12);
     QCOMPARE(int(cpu.PC), 3);
+    resetCPU();
 
 
+}
+
+void CPUTest::setCarry()
+{
+    cpu.mmu->writeByte(0x37, 0);
+    cpu.F = Flag::Z | Flag::N | Flag::H;
+    cpu.step();
+
+    FLAGSET(Flag::C | Flag::Z); //C should be set and Z should not be affected
+    QCOMPARE(cpu.cyclesSinceLastInstruction, 4);
+    QCOMPARE(int(cpu.PC), 1);
+    resetCPU();
+}
+
+
+void CPUTest::invertCarry()
+{
+    cpu.mmu->writeByte(0x3F, 0);
+    cpu.F = Flag::Z | Flag::N | Flag::H;
+    cpu.step();
+
+    FLAGSET(Flag::C | Flag::Z); //C should be set and Z should not be affected
+    resetCPU();
+
+    cpu.mmu->writeByte(0x3F, 0);
+    cpu.F = Flag::Z | Flag::N | Flag::H | Flag::C;
+    cpu.step();
+
+    FLAGSET(Flag::Z); //C should be inverted and Z should not be affected
+
+
+    QCOMPARE(cpu.cyclesSinceLastInstruction, 4);
+    QCOMPARE(int(cpu.PC), 1);
+    resetCPU();
 }
 
 
