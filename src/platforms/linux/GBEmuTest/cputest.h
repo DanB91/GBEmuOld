@@ -66,6 +66,7 @@ private slots:
     void loadSP();
     void setCarry();
     void invertCarry();
+    void loadRegToReg();
 
 private:
     CPU cpu;

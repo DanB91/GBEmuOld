@@ -22,7 +22,7 @@ void CPUTest::resetCPU(){
 
 
 CPUTest::CPUTest()
-        :cpu(MMU::UPtr(new FakeMMU))
+    :cpu(MMU::UPtr(new FakeMMU))
 {
 
 }
@@ -54,10 +54,10 @@ void CPUTest::ldNND16(){
 void CPUTest::ldNToMemory(){ //LD (BC) A
 
     std::vector<std::tuple<byte&, byte&, QString, int>> testConfigurations {// bool tests if HL should be
-                                                     std::tuple<byte&, byte&, QString, int>(cpu.C, cpu.A, tr("nothing"), 0x2),
-                                                     std::tuple<byte&, byte&, QString, int>(cpu.E, cpu.A, tr("nothing"), 0x12),
-                                                     std::tuple<byte&, byte&, QString, int>(cpu.L, cpu.A, tr("increment"), 0x22),
-                                                     std::tuple<byte&, byte&, QString, int>(cpu.L, cpu.A, tr("decrement"), 0x32)
+                                                        std::tuple<byte&, byte&, QString, int>(cpu.C, cpu.A, tr("nothing"), 0x2),
+                                                        std::tuple<byte&, byte&, QString, int>(cpu.E, cpu.A, tr("nothing"), 0x12),
+                                                        std::tuple<byte&, byte&, QString, int>(cpu.L, cpu.A, tr("increment"), 0x22),
+                                                        std::tuple<byte&, byte&, QString, int>(cpu.L, cpu.A, tr("decrement"), 0x32)
 
 
 };
@@ -126,10 +126,10 @@ void CPUTest::incSP()
 
 void CPUTest::incN(){ //INC N
     std::unordered_map<byte*, int> registersToOpcodes = {
-            {&cpu.B, 4},
-            {&cpu.C, 0xC},
-            {&cpu.D, 0x14},
-            {&cpu.E, 0x1C},
+        {&cpu.B, 4},
+        {&cpu.C, 0xC},
+        {&cpu.D, 0x14},
+        {&cpu.E, 0x1C},
         {&cpu.H, 0x24},
         {&cpu.L, 0x2C},
         {&cpu.A, 0x3C},
@@ -500,9 +500,9 @@ void CPUTest::addHLHL()
 void CPUTest::ldNFromMem()
 {
     std::vector<std::tuple<byte*, byte*, QString, int>> testConfigurations {
-                                               std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.C, tr(""),0xA),
-                                               std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.E, tr(""), 0x1A),
-                                               std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.L, tr("increment"), 0x2A),
+                                                        std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.C, tr(""),0xA),
+                                                        std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.E, tr(""), 0x1A),
+                                                        std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.L, tr("increment"), 0x2A),
                                                         std::tuple<byte*, byte*, QString, int>(&cpu.A, &cpu.L, tr("decrement"), 0x3A)
 };
     for(auto &tc : testConfigurations){
@@ -530,8 +530,8 @@ void CPUTest::ldNFromMem()
 void CPUTest::jrr8()
 {
     std::vector<int> testConfigurations {
-                                       0x18
-};
+        0x18
+    };
     for(auto &tc : testConfigurations){
         cpu.mmu->writeByte(tc, 0); //write opcode
         cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
@@ -597,40 +597,40 @@ void CPUTest::decimalAdjustA(){
 
 void CPUTest::jumpIfFlagIsSetR8(){
 
-std::vector<std::tuple<Flag, int>> testConfigurations {
-                                   std::tuple<Flag, int>(Flag::Z, 0x28),
-                                   std::tuple<Flag, int>(Flag::C, 0x38)
+    std::vector<std::tuple<Flag, int>> testConfigurations {
+                                       std::tuple<Flag, int>(Flag::Z, 0x28),
+                                       std::tuple<Flag, int>(Flag::C, 0x38)
 };
-for(auto &tc : testConfigurations){
-    cpu.mmu->writeByte(std::get<1>(tc), 0); //write opcode
-    cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
-    cpu.F = static_cast<byte>(std::get<0>(tc));
-    cpu.step();
+    for(auto &tc : testConfigurations){
+        cpu.mmu->writeByte(std::get<1>(tc), 0); //write opcode
+        cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
+        cpu.F = static_cast<byte>(std::get<0>(tc));
+        cpu.step();
 
-    QCOMPARE(int(cpu.PC), 0x57);
-    QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
+        QCOMPARE(int(cpu.PC), 0x57);
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
 
-    cpu.mmu->writeByte(std::get<1>(tc), 0x57); //write opcode
-    cpu.mmu->writeByte(-2, 0x58); //we should stay at the same place
-    cpu.step();
-    QCOMPARE(int(cpu.PC), 0x57);
-    QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
+        cpu.mmu->writeByte(std::get<1>(tc), 0x57); //write opcode
+        cpu.mmu->writeByte(-2, 0x58); //we should stay at the same place
+        cpu.step();
+        QCOMPARE(int(cpu.PC), 0x57);
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 12);
 
-    resetCPU();
+        resetCPU();
 
-    //test when flag is not set
-    cpu.mmu->writeByte(std::get<1>(tc), 0); //write opcode
-    cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
+        //test when flag is not set
+        cpu.mmu->writeByte(std::get<1>(tc), 0); //write opcode
+        cpu.mmu->writeByte(0x55, 1); //we want to jump by 0x55 bytes
 
-    cpu.step();
+        cpu.step();
 
-    QCOMPARE(int(cpu.PC), 0x2);
-    QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
-    resetCPU();
+        QCOMPARE(int(cpu.PC), 0x2);
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+        resetCPU();
 
 
 
-}
+    }
 
 }
 
@@ -693,6 +693,62 @@ void CPUTest::invertCarry()
     QCOMPARE(int(cpu.PC), 1);
     resetCPU();
 }
+
+
+void CPUTest::loadRegToReg()
+{
+
+    byte testValue = 0x40;
+    byte hValue = 0x3;
+    std::map<int, byte*> registerMap = {
+        {0, &cpu.B},
+        {1, &cpu.C},
+        {2, &cpu.D},
+        {3, &cpu.E},
+        {4, &cpu.H},
+        {5, &cpu.L},
+        {7, &cpu.A}
+    };
+    bool usedHL = false;
+
+    for(int i = 0x40; i < 0x80; i++){
+        if(i == 0x76){ //halt instruction
+            continue;
+        }
+
+        if((i & 7) != 6){ //source is register
+            *registerMap[i & 7] = testValue;
+        } else{ //source is (HL)
+            cpu.H = hValue;
+            cpu.mmu->writeByte(testValue, cpu.getHL());
+            usedHL = true;
+        }
+
+        cpu.mmu->writeByte(i, 0);
+        cpu.step();
+
+        if(((i >> 3) & 7) != 6){
+           QCOMPARE(int(*registerMap[(i >> 3) & 7]), int(testValue));
+
+           if(usedHL){
+               QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+           } else{
+               QCOMPARE(cpu.cyclesSinceLastInstruction, 4);
+           }
+
+        } else {
+           QCOMPARE(int(cpu.mmu->readByte(cpu.getHL())), int(testValue));
+           QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+        }
+
+        usedHL = false;
+        resetCPU();
+
+
+
+    }
+}
+
 
 
 

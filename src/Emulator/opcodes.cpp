@@ -233,5 +233,263 @@ void CPU::initOpcodes(){
 
                    }, 4, 1),
 
+                   Op([&](){ //40 LD B, B
+                       B = B;
+                   }, 4, 1),
+
+                   Op([&](){ //41 LD B, C
+                       B = C;
+                   }, 4, 1),
+
+                   Op([&](){ //42 LD B, D
+                       B = D;
+                   }, 4, 1),
+
+                   Op([&](){ //43 LD B, E
+                       B = E;
+                   }, 4, 1),
+
+                   Op([&](){ //44 LD B, H
+                       B = H;
+                   }, 4, 1),
+
+                   Op([&](){ //45 LD B, L
+                       B = L;
+                   }, 4, 1),
+
+                   Op([&](){ //46 LD B, (HL)
+                             B = mmu->readByte(getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //47 LD B, A
+                       B = A;
+                   }, 4, 1),
+
+                   Op([&](){ //48 LD C, B
+                       C = B;
+                   }, 4, 1),
+
+                   Op([&](){ //49 LD C, C
+                       C = C;
+                   }, 4, 1),
+
+                   Op([&](){ //4A LD C, D
+                       C = D;
+                   }, 4, 1),
+
+                   Op([&](){ //4B LD C, E
+                       C = E;
+                   }, 4, 1),
+
+                   Op([&](){ //4C LD C, H
+                       C = H;
+                   }, 4, 1),
+
+                   Op([&](){ //4D LD C, L
+                       C = L;
+                   }, 4, 1),
+
+                   Op([&](){ //4E LD C, (HL)
+                             C = mmu->readByte(getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //4F LD C, A
+                       C = A;
+                   }, 4, 1),
+
+                   Op([&](){ //50 LD D, B
+                       D = B;
+                   }, 4, 1),
+
+                   Op([&](){ //51 LD D, C
+                       D = C;
+                   }, 4, 1),
+
+                   Op([&](){ //52 LD D, D
+                       D = D;
+                   }, 4, 1),
+
+                   Op([&](){ //53 LD D, E
+                       D = E;
+                   }, 4, 1),
+
+                   Op([&](){ //54 LD D, H
+                       D = H;
+                   }, 4, 1),
+
+                   Op([&](){ //55 LD D, L
+                       D = L;
+                   }, 4, 1),
+
+                   Op([&](){ //56 LD D, (HL)
+                             D = mmu->readByte(getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //57 LD D, A
+                       D = A;
+                   }, 4, 1),
+
+                   Op([&](){ //58 LD E, B
+                       E = B;
+                   }, 4, 1),
+
+                   Op([&](){ //59 LD E, C
+                       E = C;
+                   }, 4, 1),
+
+                   Op([&](){ //5A LD E, D
+                       E = D;
+                   }, 4, 1),
+
+                   Op([&](){ //5B LD E, E
+                       E = E;
+                   }, 4, 1),
+
+                   Op([&](){ //5C LD E, H
+                       E = H;
+                   }, 4, 1),
+
+                   Op([&](){ //5D LD E, L
+                       E = L;
+                   }, 4, 1),
+
+                   Op([&](){ //5E LD E, (HL)
+                             E = mmu->readByte(getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //5F LD E, A
+                       E = A;
+                   }, 4, 1),
+
+                   Op([&](){ //60 LD H, B
+                       H = B;
+                   }, 4, 1),
+
+                   Op([&](){ //61 LD H, C
+                       H = C;
+                   }, 4, 1),
+
+                   Op([&](){ //62 LD H, D
+                       H = D;
+                   }, 4, 1),
+
+                   Op([&](){ //63 LD H, E
+                       H = E;
+                   }, 4, 1),
+
+                   Op([&](){ //64 LD H, H
+                       H = H;
+                   }, 4, 1),
+
+                   Op([&](){ //65 LD H, L
+                       H = L;
+                   }, 4, 1),
+
+                   Op([&](){ //66 LD H, (HL)
+                             H = mmu->readByte(getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //67 LD H, A
+                       H = A;
+                   }, 4, 1),
+
+                   Op([&](){ //68 LD L, B
+                       L = B;
+                   }, 4, 1),
+
+                   Op([&](){ //69 LD L, C
+                       L = C;
+                   }, 4, 1),
+
+                   Op([&](){ //6A LD L, D
+                       L = D;
+                   }, 4, 1),
+
+                   Op([&](){ //6B LD L, E
+                       L = E;
+                   }, 4, 1),
+
+                   Op([&](){ //6C LD L, H
+                       L = H;
+                   }, 4, 1),
+
+                   Op([&](){ //6D LD L, L
+                       L = L;
+                   }, 4, 1),
+
+                   Op([&](){ //6E LD L, (HL)
+                             L = mmu->readByte(getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //6F LD L, A
+                       L = A;
+                   }, 4, 1),
+
+                   Op([&](){ //70 LD (HL), B
+                             mmu->writeByte(B, getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //71 LD (HL), C
+                       mmu->writeByte(C, getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //72 LD (HL), D
+                       mmu->writeByte(D, getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //73 LD (HL), E
+                       mmu->writeByte(E, getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //74 LD (HL), H
+                       mmu->writeByte(H, getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //75 LD (HL), L
+                       mmu->writeByte(L, getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //76 HALT
+                        //will be implemented later
+                   }, 8, 1),
+
+                   Op([&](){ //77 LD (HL), A
+                       mmu->writeByte(A, getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //78 LD A, B
+                       A = B;
+                   }, 4, 1),
+
+                   Op([&](){ //79 LD A, C
+                       A = C;
+                   }, 4, 1),
+
+                   Op([&](){ //7A LD A, D
+                       A = D;
+                   }, 4, 1),
+
+                   Op([&](){ //7B LD A, E
+                       A = E;
+                   }, 4, 1),
+
+                   Op([&](){ //7C LD A, H
+                       A = H;
+                   }, 4, 1),
+
+                   Op([&](){ //7D LD A, L
+                       A = L;
+                   }, 4, 1),
+
+                   Op([&](){ //7E LD A, (HL)
+                             A = mmu->readByte(getHL());
+                   }, 8, 1),
+
+                   Op([&](){ //7F LD A, A
+                       A = A;
+                   }, 4, 1),
+
+
+
                }};
 }
