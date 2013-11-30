@@ -31,7 +31,7 @@ void CPU::initOpcodes(){
                              mmu->writeWord(SP, mmu->readWord(PC + 1));
                    }, 20, 3),
                    Op([&](){ //9 ADD HL, BC
-                             addHL(getBC());
+                             addToHL(getBC());
                    }, 8, 1),
                    Op([&](){ //A LD A, (BC)
                              A = mmu->readByte(getBC());
@@ -79,7 +79,7 @@ void CPU::initOpcodes(){
                              PC += static_cast<int8_t>(mmu->readByte(PC + 1));
                    }, 12, 2),
                    Op([&](){ //19 ADD HL, DE
-                             addHL(getDE());
+                             addToHL(getDE());
                    }, 8, 1),
                    Op([&](){ //1A LD A, (DE)
                              A = mmu->readByte(getDE());
@@ -130,7 +130,7 @@ void CPU::initOpcodes(){
                              jumpIfSet8Bit(Flag::Z, mmu->readByte(PC + 1));
                    }, 12, 8, 2),
                    Op([&](){ //29 ADD HL, HL
-                             addHL(getHL());
+                             addToHL(getHL());
                    }, 8, 1),
                    Op([&](){ //2A LD A, (HL+)
                              A = mmu->readByte(getHL());
@@ -196,7 +196,7 @@ void CPU::initOpcodes(){
                    }, 12, 8, 2),
 
                    Op([&](){ //39 ADD HL, SP
-                             addHL(SP); //need to add test
+                             addToHL(SP); //need to add test
                    }, 8, 1),
 
                    Op([&](){ //3A LD A, (HL-)
@@ -488,6 +488,40 @@ void CPU::initOpcodes(){
                    Op([&](){ //7F LD A, A
                        A = A;
                    }, 4, 1),
+
+                   Op([&](){ //80 ADD A, B
+                       addToA(B);
+                   }, 4, 1),
+
+                   Op([&](){ //81 ADD A, C
+                       addToA(C);
+                   }, 4, 1),
+
+                   Op([&](){ //82 ADD A, D
+                       addToA(D);
+                   }, 4, 1),
+
+                   Op([&](){ //83 ADD A, E
+                       addToA(E);
+                   }, 4, 1),
+
+                   Op([&](){ //84 ADD A, H
+                       addToA(H);
+                   }, 4, 1),
+
+                   Op([&](){ //85 ADD A, L
+                       addToA(L);
+                   }, 4, 1),
+
+                   Op([&](){ //86 ADD A, (HL)
+                             addToA(mmu->readByte(getHL()));
+                   }, 8, 1),
+
+                   Op([&](){ //87 ADD A, A
+                       addToA(A);
+                   }, 4, 1),
+
+
 
 
 

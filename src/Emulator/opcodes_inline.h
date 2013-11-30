@@ -46,6 +46,8 @@ inline void CPU::increment8Bit(byte &value){
 
     if(value == 0)
         setFlag(Flag::Z);
+    else
+        clearFlag(Flag::Z);
 
     clearFlag(Flag::N);
 
@@ -59,6 +61,8 @@ inline void CPU::decrement8Bit(byte &value){
 
     if(value == 0)
         setFlag(Flag::Z);
+    else
+        clearFlag(Flag::Z);
 
     setFlag(Flag::N);
 
@@ -95,7 +99,7 @@ inline void CPU::rotateRight(byte &value)
     clearFlag(Flag::Z);
 }
 
-void CPU::rotateLeftThroughCarry(byte &value)
+inline void CPU::rotateLeftThroughCarry(byte &value)
 {
     byte temp = (value << 1) | ((F & static_cast<byte>(Flag::C)) ? 1 : 0);
 
@@ -112,7 +116,7 @@ void CPU::rotateLeftThroughCarry(byte &value)
 
 }
 
-void CPU::rotateRightThroughCarry(byte &value)
+inline void CPU::rotateRightThroughCarry(byte &value)
 {
     byte temp = ((F & static_cast<byte>(Flag::C)) ? 0x80 : 0) | (value >> 1) ;
 
@@ -128,7 +132,7 @@ void CPU::rotateRightThroughCarry(byte &value)
     clearFlag(Flag::Z);
 }
 
-inline void CPU::addHL(word addend){
+inline void CPU::addToHL(word addend){
     int result = getHL() + addend;
 
     clearFlag(Flag::N);
@@ -210,6 +214,34 @@ inline void CPU::complement(byte &value){
     value = ~value;
     setFlag(Flag::N);
     setFlag(Flag::H);
+
+}
+
+void CPU::addToA(byte value)
+{
+    int result = A + value;
+
+    if((result & 0xFF) == 0){
+        setFlag(Flag::Z);
+    } else {
+        clearFlag(Flag::Z);
+    }
+
+    if(result & 0x100){
+        setFlag(Flag::C);
+    } else {
+        clearFlag(Flag::C);
+    }
+
+    if((A ^ value ^ (result & 0xFF)) & 0x10){
+        setFlag(Flag::H);
+    } else{
+        clearFlag(Flag::H);
+    }
+
+    clearFlag(Flag::N);
+
+    A = static_cast<byte>(result);
 
 }
 

@@ -104,11 +104,13 @@ private:
     void rotateRight(byte &value);
     void rotateLeftThroughCarry(byte &value);
     void rotateRightThroughCarry(byte &value);
-    void addHL(word addend);
+    void addToHL(word addend);
     void jumpIfClear8Bit(Flag flag, byte value);
     void decimalAdjust(byte &value);
     void jumpIfSet8Bit(Flag flag, byte value);
     void complement(byte &value);
+    void addToA(byte value);
+
 
 };
 
