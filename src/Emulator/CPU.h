@@ -110,6 +110,7 @@ private:
     void jumpIfSet8Bit(Flag flag, byte value);
     void complement(byte &value);
     void addToA(byte value);
+    void subtractFromA(byte value);
 
 
 };

@@ -217,7 +217,7 @@ inline void CPU::complement(byte &value){
 
 }
 
-void CPU::addToA(byte value)
+inline void CPU::addToA(byte value)
 {
     int result = A + value;
 
@@ -242,6 +242,35 @@ void CPU::addToA(byte value)
     clearFlag(Flag::N);
 
     A = static_cast<byte>(result);
+
+}
+
+inline void CPU::subtractFromA(byte value)
+{
+    int result = A - value;
+
+    if((result & 0xFF) == 0){
+        setFlag(Flag::Z);
+    } else {
+        clearFlag(Flag::Z);
+    }
+
+    if(result < 0){
+        setFlag(Flag::C);
+    } else{
+        clearFlag(Flag::C);
+    }
+
+    if((A ^ value ^ (result & 0xFF)) & 0x10){
+        setFlag(Flag::H);
+    } else{
+        clearFlag(Flag::H);
+    }
+
+    setFlag(Flag::N);
+
+    A = static_cast<byte>(result);
+
 
 }
 

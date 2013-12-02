@@ -79,6 +79,8 @@ private:
     void loadRegToReg(std::map<int, byte *> &registerMap, int opcode);
     void addToA(std::map<int, byte *> &registerMap, int opcode);
     void addToAWithCarry(std::map<int, byte *> &registerMap, int opcode);
+    void subtractFromA(std::map<int, byte *> &registerMap, int opcode);
+    void subtractFromAWithCarry(std::map<int, byte *> &registerMap, int opcode);
 
 
 

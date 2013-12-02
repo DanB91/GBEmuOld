@@ -561,6 +561,78 @@ void CPU::initOpcodes(){
                              addToA(A + carry);
                    }, 4, 1),
 
+                   Op([&](){ //90 SUB B
+                       subtractFromA(B);
+                   }, 4, 1),
+
+                   Op([&](){ //91 SUB C
+                       subtractFromA(C);;
+                   }, 4, 1),
+
+                   Op([&](){ //92 SUB D
+                       subtractFromA(D);;
+                   }, 4, 1),
+
+                   Op([&](){ //93 SUB E
+                       subtractFromA(E);;
+                   }, 4, 1),
+
+                   Op([&](){ //94 SUB H
+                       subtractFromA(H);;
+                   }, 4, 1),
+
+                   Op([&](){ //95 SUB L
+                       subtractFromA(L);
+                   }, 4, 1),
+
+                   Op([&](){ //96 SUB (HL)
+                             subtractFromA(mmu->readByte(getHL()));
+                   }, 8, 1),
+
+                   Op([&](){ //97 SUB A
+                             subtractFromA(A);
+                   }, 4, 1),
+
+                   Op([&](){ //98 SBC B
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             subtractFromA(B + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //99 SBC C
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             subtractFromA(C + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //9A SBC D
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             subtractFromA(D + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //9B SBC E
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             subtractFromA(E + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //9C SBC H
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             subtractFromA(H + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //9D SBC L
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             subtractFromA(L + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //9E SBC (HL)
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             subtractFromA(mmu->readByte(getHL()) + carry);
+                   }, 8, 1),
+
+                   Op([&](){ //9F SBC A
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             subtractFromA(A + carry);
+                   }, 4, 1),
+
 
 
 
