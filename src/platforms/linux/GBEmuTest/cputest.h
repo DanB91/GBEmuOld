@@ -68,15 +68,17 @@ private slots:
     void invertCarry();
     void ops40toBF();
 
+
+
+private:
+
+    CPU cpu;
+
+    void resetCPU();
     //helpers for ops40toBF
     void loadRegToReg(std::map<int, byte *> &registerMap, int opcode);
     void addToA(std::map<int, byte *> &registerMap, int opcode);
 
-
-private:
-    CPU cpu;
-
-    void resetCPU();
 
 };
 

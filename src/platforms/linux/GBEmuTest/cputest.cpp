@@ -795,6 +795,7 @@ void CPUTest::addToA(std::map<int, byte *> &registerMap, int opcode)
     if(!usedHL){
         *registerMap[opcode & 7] = testValue;
     } else{
+        cpu.H = hValue;
         cpu.mmu->writeByte(testValue, cpu.getHL());
     }
 
