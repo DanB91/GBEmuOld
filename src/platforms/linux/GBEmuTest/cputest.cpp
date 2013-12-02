@@ -716,6 +716,9 @@ void CPUTest::ops40toBF()
         else if(i >= 0x80 && i < 0x88){
             addToA(registerMap, i);
         }
+        else if(i >= 0x88 && i < 0x90){
+            addToAWithCarry(registerMap, i);
+        }
 
         resetCPU();
     }
@@ -815,6 +818,59 @@ void CPUTest::addToA(std::map<int, byte *> &registerMap, int opcode)
 
 
 
+}
+
+void CPUTest::addToAWithCarry(std::map<int, byte *> &registerMap, int opcode)
+{
+    byte testValue = 0x80;
+    byte hValue = 0x3;
+    bool usedHL = false;
+
+    cpu.A = 0x80;
+
+    if((opcode & 7) != 6){ //source is register
+        *registerMap[opcode & 7] = testValue;
+    } else{ //source is (HL)
+        cpu.H = hValue;
+        cpu.mmu->writeByte(testValue, cpu.getHL());
+        usedHL = true;
+    }
+
+    cpu.mmu->writeByte(opcode, 0);
+    cpu.step();
+
+    QCOMPARE(int(cpu.A), 0); //overflow
+    FLAGSET(Flag::C | Flag::Z);
+
+
+    testValue = 0x10;
+
+    if(!usedHL){
+        *registerMap[opcode & 7] = testValue;
+    } else{
+        cpu.H = hValue;
+        cpu.mmu->writeByte(testValue, cpu.getHL());
+    }
+
+    cpu.PC = 0;
+
+    cpu.mmu->writeByte(opcode, 0);
+    cpu.step();
+
+    if(opcode == 0x8F){
+        QCOMPARE(int(cpu.A), 0x21); //special case for ADC A,A since register A will double
+    } else{
+        QCOMPARE(int(cpu.A), 0x11); //answer will be plus 1 since carry was set
+    }
+
+    FLAGSET(Flag::None); //0 + 0x11 does not have a carry
+
+
+    if(usedHL){
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+    } else{
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 4);
+    }
 }
 
 

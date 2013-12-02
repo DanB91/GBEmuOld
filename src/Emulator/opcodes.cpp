@@ -518,9 +518,48 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //87 ADD A, A
-                       addToA(A);
+                             addToA(A);
                    }, 4, 1),
 
+                   Op([&](){ //88 ADC A, B
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             addToA(B + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //89 ADC A, C
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             addToA(C + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //8A ADC A, D
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             addToA(D + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //8B ADC A, E
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             addToA(E + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //8C ADC A, H
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             addToA(H + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //8D ADC A, L
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             addToA(L + carry);
+                   }, 4, 1),
+
+                   Op([&](){ //8E ADC A, (HL)
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             addToA(mmu->readByte(getHL()) + carry);
+                   }, 8, 1),
+
+                   Op([&](){ //8F ADC A, A
+                             int carry = isFlagSet(Flag::C) ? 1 : 0;
+                             addToA(A + carry);
+                   }, 4, 1),
 
 
 
