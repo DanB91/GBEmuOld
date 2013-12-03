@@ -724,7 +724,10 @@ void CPUTest::ops40toBF()
         }
         else if(i >= 0x98 && i < 0xA0){
             subtractFromAWithCarry(registerMap, i);
-        }
+        } 
+        else if(i >= 0xA0 && i < 0xA8){
+            andToA(registerMap, i);
+        } 
 
         resetCPU();
     }
@@ -909,7 +912,6 @@ void CPUTest::subtractFromA(std::map<int, byte *> &registerMap, int opcode)
 
     testValue = 0x8;
     cpu.A = 0x10;
-
     if(!usedHL){
         *registerMap[opcode & 7] = testValue;
     } else{
@@ -998,6 +1000,39 @@ void CPUTest::subtractFromAWithCarry(std::map<int, byte *> &registerMap, int opc
 }
 
 
+void CPUTest::andToA(std::map<int, byte *> &registerMap, int opcode){
 
+    byte testValue = 0xA;
+    byte hValue = 0x3;
+    bool usedHL = false;
+
+    cpu.A = 5;
+
+    if((opcode & 7) != 6){ //source is register
+        *registerMap[opcode & 7] = testValue;
+    } else{ //source is (HL)
+        cpu.H = hValue;
+        cpu.mmu->writeByte(testValue, cpu.getHL());
+        usedHL = true;
+    }
+
+    cpu.mmu->writeByte(opcode, 0);
+    cpu.step();
+
+    if(opcode == 0xA7){
+        QCOMPARE(int(cpu.A), 0xA); //AND A will not change A
+        FLAGSET(Flag::H);
+    } else{
+        QCOMPARE(int(cpu.A), 0); //5 & 10 is 0
+        FLAGSET(Flag::Z | Flag::H);
+    }
+    resetCPU();
+
+    if(usedHL){
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+    } else{
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 4);
+    }
+}
 
 

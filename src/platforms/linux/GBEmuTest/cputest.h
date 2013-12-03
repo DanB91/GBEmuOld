@@ -69,7 +69,6 @@ private slots:
     void ops40toBF();
 
 
-
 private:
 
     CPU cpu;
@@ -81,7 +80,7 @@ private:
     void addToAWithCarry(std::map<int, byte *> &registerMap, int opcode);
     void subtractFromA(std::map<int, byte *> &registerMap, int opcode);
     void subtractFromAWithCarry(std::map<int, byte *> &registerMap, int opcode);
-
+    void andToA(std::map<int, byte *> &registerMap, int opcode);
 
 
 };

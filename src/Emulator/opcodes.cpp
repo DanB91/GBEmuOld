@@ -633,6 +633,37 @@ void CPU::initOpcodes(){
                              subtractFromA(A + carry);
                    }, 4, 1),
 
+                   Op([&](){ //A0 AND B
+                           andToA(B);
+                           }, 4, 1),
+
+                   Op([&](){ //A1 AND C
+                           andToA(C);
+                           }, 4, 1),
+
+                   Op([&](){ //A2 AND D
+                           andToA(D);
+                           }, 4, 1),
+
+                   Op([&](){ //A3 AND E
+                           andToA(E);
+                           }, 4, 1),
+
+                   Op([&](){ //A4 AND H
+                           andToA(H);
+                           }, 4, 1),
+
+                   Op([&](){ //A5 AND L
+                           andToA(L);
+                           }, 4, 1),
+
+                   Op([&](){ //A6 AND (HL)
+                           andToA(mmu->readByte(getHL()));
+                           }, 8, 1),
+
+                   Op([&](){ //A7 AND A
+                           andToA(A);
+                           }, 4, 1),
 
 
 

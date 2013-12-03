@@ -274,6 +274,21 @@ inline void CPU::subtractFromA(byte value)
 
 }
 
+inline void CPU::andToA(byte value){
+    A &= value;
+
+    if(A == 0){
+        setFlag(Flag::Z);
+    } else{
+        clearFlag(Flag::Z);
+    }
+
+    clearFlag(Flag::C);
+    clearFlag(Flag::N);
+    setFlag(Flag::H);
+
+}
+
 
 
 

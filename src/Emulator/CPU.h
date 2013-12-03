@@ -111,6 +111,7 @@ private:
     void complement(byte &value);
     void addToA(byte value);
     void subtractFromA(byte value);
+    void andToA(byte value);
 
 
 };
