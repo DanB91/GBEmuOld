@@ -289,6 +289,43 @@ inline void CPU::andToA(byte value){
 
 }
 
+inline void CPU::xorToA(byte value)
+{
+    A ^= value;
+
+    if(A == 0){
+        setFlag(Flag::Z);
+    } else{
+        clearFlag(Flag::Z);
+    }
+
+    clearFlag(Flag::C);
+    clearFlag(Flag::N);
+    clearFlag(Flag::H);
+}
+
+inline void CPU::orToA(byte value)
+{
+    A |= value;
+
+    if(A == 0){
+        setFlag(Flag::Z);
+    } else{
+        clearFlag(Flag::Z);
+    }
+
+    clearFlag(Flag::C);
+    clearFlag(Flag::N);
+    clearFlag(Flag::H);
+}
+
+inline void CPU::compareToA(byte value)
+{
+    byte tempA = A;
+    subtractFromA(value);
+    A = tempA;
+}
+
 
 
 

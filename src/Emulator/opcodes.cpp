@@ -234,27 +234,27 @@ void CPU::initOpcodes(){
                    }, 4, 1),
 
                    Op([&](){ //40 LD B, B
-                       B = B;
+                             B = B;
                    }, 4, 1),
 
                    Op([&](){ //41 LD B, C
-                       B = C;
+                             B = C;
                    }, 4, 1),
 
                    Op([&](){ //42 LD B, D
-                       B = D;
+                             B = D;
                    }, 4, 1),
 
                    Op([&](){ //43 LD B, E
-                       B = E;
+                             B = E;
                    }, 4, 1),
 
                    Op([&](){ //44 LD B, H
-                       B = H;
+                             B = H;
                    }, 4, 1),
 
                    Op([&](){ //45 LD B, L
-                       B = L;
+                             B = L;
                    }, 4, 1),
 
                    Op([&](){ //46 LD B, (HL)
@@ -262,31 +262,31 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //47 LD B, A
-                       B = A;
+                             B = A;
                    }, 4, 1),
 
                    Op([&](){ //48 LD C, B
-                       C = B;
+                             C = B;
                    }, 4, 1),
 
                    Op([&](){ //49 LD C, C
-                       C = C;
+                             C = C;
                    }, 4, 1),
 
                    Op([&](){ //4A LD C, D
-                       C = D;
+                             C = D;
                    }, 4, 1),
 
                    Op([&](){ //4B LD C, E
-                       C = E;
+                             C = E;
                    }, 4, 1),
 
                    Op([&](){ //4C LD C, H
-                       C = H;
+                             C = H;
                    }, 4, 1),
 
                    Op([&](){ //4D LD C, L
-                       C = L;
+                             C = L;
                    }, 4, 1),
 
                    Op([&](){ //4E LD C, (HL)
@@ -294,31 +294,31 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //4F LD C, A
-                       C = A;
+                             C = A;
                    }, 4, 1),
 
                    Op([&](){ //50 LD D, B
-                       D = B;
+                             D = B;
                    }, 4, 1),
 
                    Op([&](){ //51 LD D, C
-                       D = C;
+                             D = C;
                    }, 4, 1),
 
                    Op([&](){ //52 LD D, D
-                       D = D;
+                             D = D;
                    }, 4, 1),
 
                    Op([&](){ //53 LD D, E
-                       D = E;
+                             D = E;
                    }, 4, 1),
 
                    Op([&](){ //54 LD D, H
-                       D = H;
+                             D = H;
                    }, 4, 1),
 
                    Op([&](){ //55 LD D, L
-                       D = L;
+                             D = L;
                    }, 4, 1),
 
                    Op([&](){ //56 LD D, (HL)
@@ -326,31 +326,31 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //57 LD D, A
-                       D = A;
+                             D = A;
                    }, 4, 1),
 
                    Op([&](){ //58 LD E, B
-                       E = B;
+                             E = B;
                    }, 4, 1),
 
                    Op([&](){ //59 LD E, C
-                       E = C;
+                             E = C;
                    }, 4, 1),
 
                    Op([&](){ //5A LD E, D
-                       E = D;
+                             E = D;
                    }, 4, 1),
 
                    Op([&](){ //5B LD E, E
-                       E = E;
+                             E = E;
                    }, 4, 1),
 
                    Op([&](){ //5C LD E, H
-                       E = H;
+                             E = H;
                    }, 4, 1),
 
                    Op([&](){ //5D LD E, L
-                       E = L;
+                             E = L;
                    }, 4, 1),
 
                    Op([&](){ //5E LD E, (HL)
@@ -358,31 +358,31 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //5F LD E, A
-                       E = A;
+                             E = A;
                    }, 4, 1),
 
                    Op([&](){ //60 LD H, B
-                       H = B;
+                             H = B;
                    }, 4, 1),
 
                    Op([&](){ //61 LD H, C
-                       H = C;
+                             H = C;
                    }, 4, 1),
 
                    Op([&](){ //62 LD H, D
-                       H = D;
+                             H = D;
                    }, 4, 1),
 
                    Op([&](){ //63 LD H, E
-                       H = E;
+                             H = E;
                    }, 4, 1),
 
                    Op([&](){ //64 LD H, H
-                       H = H;
+                             H = H;
                    }, 4, 1),
 
                    Op([&](){ //65 LD H, L
-                       H = L;
+                             H = L;
                    }, 4, 1),
 
                    Op([&](){ //66 LD H, (HL)
@@ -390,31 +390,31 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //67 LD H, A
-                       H = A;
+                             H = A;
                    }, 4, 1),
 
                    Op([&](){ //68 LD L, B
-                       L = B;
+                             L = B;
                    }, 4, 1),
 
                    Op([&](){ //69 LD L, C
-                       L = C;
+                             L = C;
                    }, 4, 1),
 
                    Op([&](){ //6A LD L, D
-                       L = D;
+                             L = D;
                    }, 4, 1),
 
                    Op([&](){ //6B LD L, E
-                       L = E;
+                             L = E;
                    }, 4, 1),
 
                    Op([&](){ //6C LD L, H
-                       L = H;
+                             L = H;
                    }, 4, 1),
 
                    Op([&](){ //6D LD L, L
-                       L = L;
+                             L = L;
                    }, 4, 1),
 
                    Op([&](){ //6E LD L, (HL)
@@ -422,7 +422,7 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //6F LD L, A
-                       L = A;
+                             L = A;
                    }, 4, 1),
 
                    Op([&](){ //70 LD (HL), B
@@ -430,55 +430,55 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //71 LD (HL), C
-                       mmu->writeByte(C, getHL());
+                             mmu->writeByte(C, getHL());
                    }, 8, 1),
 
                    Op([&](){ //72 LD (HL), D
-                       mmu->writeByte(D, getHL());
+                             mmu->writeByte(D, getHL());
                    }, 8, 1),
 
                    Op([&](){ //73 LD (HL), E
-                       mmu->writeByte(E, getHL());
+                             mmu->writeByte(E, getHL());
                    }, 8, 1),
 
                    Op([&](){ //74 LD (HL), H
-                       mmu->writeByte(H, getHL());
+                             mmu->writeByte(H, getHL());
                    }, 8, 1),
 
                    Op([&](){ //75 LD (HL), L
-                       mmu->writeByte(L, getHL());
+                             mmu->writeByte(L, getHL());
                    }, 8, 1),
 
                    Op([&](){ //76 HALT
-                        //will be implemented later
+                             //will be implemented later
                    }, 8, 1),
 
                    Op([&](){ //77 LD (HL), A
-                       mmu->writeByte(A, getHL());
+                             mmu->writeByte(A, getHL());
                    }, 8, 1),
 
                    Op([&](){ //78 LD A, B
-                       A = B;
+                             A = B;
                    }, 4, 1),
 
                    Op([&](){ //79 LD A, C
-                       A = C;
+                             A = C;
                    }, 4, 1),
 
                    Op([&](){ //7A LD A, D
-                       A = D;
+                             A = D;
                    }, 4, 1),
 
                    Op([&](){ //7B LD A, E
-                       A = E;
+                             A = E;
                    }, 4, 1),
 
                    Op([&](){ //7C LD A, H
-                       A = H;
+                             A = H;
                    }, 4, 1),
 
                    Op([&](){ //7D LD A, L
-                       A = L;
+                             A = L;
                    }, 4, 1),
 
                    Op([&](){ //7E LD A, (HL)
@@ -486,31 +486,31 @@ void CPU::initOpcodes(){
                    }, 8, 1),
 
                    Op([&](){ //7F LD A, A
-                       A = A;
+                             A = A;
                    }, 4, 1),
 
                    Op([&](){ //80 ADD A, B
-                       addToA(B);
+                             addToA(B);
                    }, 4, 1),
 
                    Op([&](){ //81 ADD A, C
-                       addToA(C);
+                             addToA(C);
                    }, 4, 1),
 
                    Op([&](){ //82 ADD A, D
-                       addToA(D);
+                             addToA(D);
                    }, 4, 1),
 
                    Op([&](){ //83 ADD A, E
-                       addToA(E);
+                             addToA(E);
                    }, 4, 1),
 
                    Op([&](){ //84 ADD A, H
-                       addToA(H);
+                             addToA(H);
                    }, 4, 1),
 
                    Op([&](){ //85 ADD A, L
-                       addToA(L);
+                             addToA(L);
                    }, 4, 1),
 
                    Op([&](){ //86 ADD A, (HL)
@@ -562,27 +562,27 @@ void CPU::initOpcodes(){
                    }, 4, 1),
 
                    Op([&](){ //90 SUB B
-                       subtractFromA(B);
+                             subtractFromA(B);
                    }, 4, 1),
 
                    Op([&](){ //91 SUB C
-                       subtractFromA(C);;
+                             subtractFromA(C);;
                    }, 4, 1),
 
                    Op([&](){ //92 SUB D
-                       subtractFromA(D);;
+                             subtractFromA(D);;
                    }, 4, 1),
 
                    Op([&](){ //93 SUB E
-                       subtractFromA(E);;
+                             subtractFromA(E);;
                    }, 4, 1),
 
                    Op([&](){ //94 SUB H
-                       subtractFromA(H);;
+                             subtractFromA(H);;
                    }, 4, 1),
 
                    Op([&](){ //95 SUB L
-                       subtractFromA(L);
+                             subtractFromA(L);
                    }, 4, 1),
 
                    Op([&](){ //96 SUB (HL)
@@ -634,36 +634,135 @@ void CPU::initOpcodes(){
                    }, 4, 1),
 
                    Op([&](){ //A0 AND B
-                           andToA(B);
-                           }, 4, 1),
+                             andToA(B);
+                   }, 4, 1),
 
                    Op([&](){ //A1 AND C
-                           andToA(C);
-                           }, 4, 1),
+                             andToA(C);
+                   }, 4, 1),
 
                    Op([&](){ //A2 AND D
-                           andToA(D);
-                           }, 4, 1),
+                             andToA(D);
+                   }, 4, 1),
 
                    Op([&](){ //A3 AND E
-                           andToA(E);
-                           }, 4, 1),
+                             andToA(E);
+                   }, 4, 1),
 
                    Op([&](){ //A4 AND H
-                           andToA(H);
-                           }, 4, 1),
+                             andToA(H);
+                   }, 4, 1),
 
                    Op([&](){ //A5 AND L
-                           andToA(L);
-                           }, 4, 1),
+                             andToA(L);
+                   }, 4, 1),
 
                    Op([&](){ //A6 AND (HL)
-                           andToA(mmu->readByte(getHL()));
-                           }, 8, 1),
+                             andToA(mmu->readByte(getHL()));
+                   }, 8, 1),
 
                    Op([&](){ //A7 AND A
-                           andToA(A);
-                           }, 4, 1),
+                             andToA(A);
+                   }, 4, 1),
+
+                   Op([&](){ //A8 XOR B
+                             xorToA(B);
+                   }, 4, 1),
+
+                   Op([&](){ //A9 XOR C
+                             xorToA(C);
+                   }, 4, 1),
+
+                   Op([&](){ //AA XOR D
+                             xorToA(D);
+                   }, 4, 1),
+
+                   Op([&](){ //AB XOR E
+                             xorToA(E);
+                   }, 4, 1),
+
+                   Op([&](){ //AC XOR H
+                             xorToA(H);
+                   }, 4, 1),
+
+                   Op([&](){ //AD XOR L
+                             xorToA(L);
+                   }, 4, 1),
+
+                   Op([&](){ //AE XOR (HL)
+                             xorToA(mmu->readByte(getHL()));
+                   }, 8, 1),
+
+                   Op([&](){ //AF XOR A
+                             xorToA(A);
+                   }, 4, 1),
+
+                   Op([&](){ //B0 OR B
+                            orToA(B);
+                   }, 4, 1),
+
+                   Op([&](){ //B1 OR C
+                             orToA(C);
+                   }, 4, 1),
+
+                   Op([&](){ //B2 OR D
+                             orToA(D);
+                   }, 4, 1),
+
+                   Op([&](){ //B3 OR E
+                             orToA(E);
+                   }, 4, 1),
+
+                   Op([&](){ //B4 OR H
+                             orToA(H);
+                   }, 4, 1),
+
+                   Op([&](){ //B5 OR L
+                             orToA(L);
+                   }, 4, 1),
+
+                   Op([&](){ //B6 OR (HL)
+                             orToA(mmu->readByte(getHL()));
+                   }, 8, 1),
+
+                   Op([&](){ //B7 OR A
+                             orToA(A);
+                   }, 4, 1),
+
+                   Op([&](){ //B8 CP B
+                             compareToA(B);
+                   }, 4, 1),
+
+                   Op([&](){ //B9 CP C
+                             compareToA(C);
+                   }, 4, 1),
+
+                   Op([&](){ //BA CP D
+                             compareToA(D);
+                   }, 4, 1),
+
+                   Op([&](){ //BB CP E
+                             compareToA(E);
+                   }, 4, 1),
+
+                   Op([&](){ //BC CP H
+                             compareToA(H);
+                   }, 4, 1),
+
+                   Op([&](){ //BD CP L
+                             compareToA(L);
+                   }, 4, 1),
+
+                   Op([&](){ //BE CP (HL)
+                             compareToA(mmu->readByte(getHL()));
+                   }, 8, 1),
+
+                   Op([&](){ //BF CP A
+                             compareToA(A);
+                   }, 4, 1),
+
+
+
 
 
 

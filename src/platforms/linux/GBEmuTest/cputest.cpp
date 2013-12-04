@@ -728,6 +728,15 @@ void CPUTest::ops40toBF()
         else if(i >= 0xA0 && i < 0xA8){
             andToA(registerMap, i);
         } 
+        else if(i >= 0xA8 && i < 0xB0){
+            xorToA(registerMap, i);
+        } 
+        else if(i >= 0xB0 && i < 0xB8){
+            orToA(registerMap, i);
+        } 
+        else if(i >= 0xB8 && i < 0xC0){
+            compareToA(registerMap, i);
+        } 
 
         resetCPU();
     }
@@ -1035,4 +1044,143 @@ void CPUTest::andToA(std::map<int, byte *> &registerMap, int opcode){
     }
 }
 
+
+void CPUTest::xorToA(std::map<int, byte *> &registerMap, int opcode){
+
+    byte testValue = 10;
+    byte hValue = 0x3;
+    bool usedHL = false;
+
+    cpu.A = 5;
+
+    if((opcode & 7) != 6){ //source is register
+        *registerMap[opcode & 7] = testValue;
+    } else{ //source is (HL)
+        cpu.H = hValue;
+        cpu.mmu->writeByte(testValue, cpu.getHL());
+        usedHL = true;
+    }
+
+    cpu.mmu->writeByte(opcode, 0);
+    cpu.step();
+
+    if(opcode == 0xAF){
+        QCOMPARE(int(cpu.A), 0); //XOR A will clear A
+        FLAGSET(Flag::Z);
+    } else{
+        QCOMPARE(int(cpu.A), 15); //5 ^ 10 is 15
+        FLAGSET(Flag::None);
+    }
+    resetCPU();
+
+    if(usedHL){
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+    } else{
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 4);
+    }
+}
+
+void CPUTest::orToA(std::map<int, byte *> &registerMap, int opcode){
+
+    byte testValue = 0xA;
+    byte hValue = 0x3;
+    bool usedHL = false;
+
+    cpu.A = 5;
+
+    if((opcode & 7) != 6){ //source is register
+        *registerMap[opcode & 7] = testValue;
+    } else{ //source is (HL)
+        cpu.H = hValue;
+        cpu.mmu->writeByte(testValue, cpu.getHL());
+        usedHL = true;
+    }
+
+    cpu.mmu->writeByte(opcode, 0);
+    cpu.step();
+
+    if(opcode == 0xB7){
+        QCOMPARE(int(cpu.A), 0xA); //OR A will not change A
+        FLAGSET(Flag::None);
+    } else{
+        QCOMPARE(int(cpu.A), 0xF); //5 or 10 is 15
+        FLAGSET(Flag::None);
+    }
+    resetCPU();
+    
+    if((opcode & 7) == 6){ //source is register
+        cpu.H = hValue;
+    } 
+    //test 0 or 0, which should set the Z flag
+    cpu.mmu->writeByte(opcode, 0);
+    cpu.step();
+ 
+    QCOMPARE(int(cpu.A), 0);
+    FLAGSET(Flag::Z);
+    
+    if(usedHL){
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+    } else{
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 4);
+    }
+}
+
+void CPUTest::compareToA(std::map<int, byte *> &registerMap, int opcode)
+{
+    byte testValue = 5;
+    byte hValue = 0x3;
+    bool usedHL = false;
+
+
+    if((opcode & 7) != 6){ //source is register
+        *registerMap[opcode & 7] = testValue;
+    } else{ //source is (HL)
+        cpu.H = hValue;
+        cpu.mmu->writeByte(testValue, cpu.getHL());
+        usedHL = true;
+    }
+
+    cpu.A = 3;
+
+    cpu.mmu->writeByte(opcode, 0);
+    cpu.step();
+
+    if(opcode == 0x97){
+        QCOMPARE(int(cpu.A), 3); //A should not change
+        FLAGSET(Flag::Z | Flag::N);
+    } else{
+        QCOMPARE(int(cpu.A), 3); //A should not change
+        FLAGSET(Flag::C | Flag::N | Flag::H);
+    }
+    resetCPU();
+
+    testValue = 0x8;
+    if(!usedHL){
+        *registerMap[opcode & 7] = testValue;
+    } else{
+        cpu.H = hValue;
+        cpu.mmu->writeByte(testValue, cpu.getHL());
+    }
+
+    cpu.A = 0x10;
+    
+    cpu.mmu->writeByte(opcode, 0);
+    cpu.step();
+
+    if(opcode == 0xBF){
+        QCOMPARE(int(cpu.A), 0x10); //A should not change
+        FLAGSET(Flag::Z | Flag::N);
+    } else{
+        QCOMPARE(int(cpu.A), 0x10); //A should not change
+        FLAGSET(Flag::H | Flag::N);
+    }
+
+
+    if(usedHL){
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 8);
+    } else{
+        QCOMPARE(cpu.cyclesSinceLastInstruction, 4);
+    }
+
+}
 

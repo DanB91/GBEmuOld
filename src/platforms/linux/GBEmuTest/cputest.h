@@ -81,6 +81,9 @@ private:
     void subtractFromA(std::map<int, byte *> &registerMap, int opcode);
     void subtractFromAWithCarry(std::map<int, byte *> &registerMap, int opcode);
     void andToA(std::map<int, byte *> &registerMap, int opcode);
+    void xorToA(std::map<int, byte *> &registerMap, int opcode);
+    void orToA(std::map<int, byte *> &registerMap, int opcode);
+    void compareToA(std::map<int, byte *> &registerMap, int opcode);
 
 
 };

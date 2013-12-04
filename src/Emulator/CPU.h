@@ -112,6 +112,9 @@ private:
     void addToA(byte value);
     void subtractFromA(byte value);
     void andToA(byte value);
+    void xorToA(byte value);
+    void orToA(byte value);
+    void compareToA(byte value);
 
 
 };
