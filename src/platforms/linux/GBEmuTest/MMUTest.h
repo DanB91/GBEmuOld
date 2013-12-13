@@ -16,7 +16,7 @@ public:
 
 private Q_SLOTS:
     void readByte();
-    void writeWord();
+    void readWord();
     void writeByte();
 
 
@@ -54,7 +54,7 @@ void MMUTest::readByte(){
 
 }
 
-void MMUTest::writeWord(){
+void MMUTest::readWord(){
 
     mmuReset();
 
